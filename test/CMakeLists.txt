@@ -45,6 +45,7 @@ if(BUILD_TESTS_CPU)
     add_cpu_test(test_real_data_cpu)
     add_cpu_test(test_stats_cpu)
     add_cpu_test(test_stress_cpu)
+    add_cpu_test(test_profile_cpu)
 endif()
 
 # CUDA Tests

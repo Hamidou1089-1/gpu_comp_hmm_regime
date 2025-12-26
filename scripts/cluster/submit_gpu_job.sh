@@ -20,6 +20,7 @@ echo ""
 # 1. Sync le code vers le cluster
 echo "📤 Syncing code to cluster..."
 rsync -avz --exclude 'build/' \
+           --exclude '.vscode/' \
            --exclude '.venv/' \
            --exclude 'data/raw/' \
            --exclude '*.o' \
@@ -38,8 +39,8 @@ JOB_SCRIPT=$(cat <<'EOFSCRIPT'
 #SBATCH --time=01:00:00
 #SBATCH --partition=gpu
 #SBATCH --gres=shard:1           # OBLIGATOIRE pour GPU
-#SBATCH --cpus-per-task=4
-#SBATCH --mem=4GB                # Sinon réserve tout le serveur!
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=16GB                # Sinon réserve tout le serveur!
 
 echo "=========================================="
 echo "GPU Job - HMM Regime Detection"
@@ -86,7 +87,7 @@ if [ "TEST_NAME_PLACEHOLDER" == "all" ]; then
             echo "================================"
             echo "Running: $test"
             echo "================================"
-            srun --gres=shard:1 --mem=2GB ./$test
+            srun --gres=shard:1 --mem=16GB ./$test
         fi
     done
 else

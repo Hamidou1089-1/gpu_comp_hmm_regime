@@ -8,4 +8,4 @@ echo "Launching interactive GPU session..."
 echo "This will give you a shell with GPU access"
 echo ""
 
-ssh -t $REMOTE_USER@$REMOTE_HOST "srun --gres=shard:1 --cpus-per-task=4 --mem=4GB --pty bash"
+ssh -t $REMOTE_USER@$REMOTE_HOST "srun --gres=shard:1 --cpus-per-task=8 --mem=16GB --pty bash"

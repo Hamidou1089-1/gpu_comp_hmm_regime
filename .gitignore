@@ -6,6 +6,8 @@ cmake-build-*/
 .vscode/
 .idea/
 .venv/
+.notebook/
+scipts/FlameGraph
 *.swp
 *.swo
 *~
@@ -19,3 +21,4 @@ cmake-build-*/
 data/*.csv
 data/*.txt
 !data/README.md
+

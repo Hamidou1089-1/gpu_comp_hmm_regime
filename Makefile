@@ -3,7 +3,7 @@
 # ==============================================================================
 
 
-.PHONY: help build build-cuda clean test test-cpu test-gpu benchmark info data venv cluster-submit cluster-status
+.PHONY: help build build-cuda clean test test-cpu test-gpu benchmark info data venv cluster-submit cluster-status profile-cpu profile-analyze
 .DEFAULT_GOAL := help
 
 # Colors
@@ -115,6 +115,49 @@ benchmark-all: ## Run ALL benchmarks (CPU + GPU) - VERY LONG
 	@sleep 5
 	@$(MAKE) benchmark-cpu
 	@$(MAKE) benchmark-gpu
+
+
+
+# ==============================================================================
+# Profiling Targets
+# ==============================================================================
+profile-cpu: ## Build with profiling and run profiler (perf record)
+	@echo "$(BLUE)Building with profiling support...$(NC)"
+	@mkdir -p $(BUILD_DIR)
+	@cd $(BUILD_DIR) && cmake -DCMAKE_BUILD_TYPE=Release \
+		-DBUILD_PROFILING=ON \
+		-DBUILD_TESTS_CPU=ON \
+		.. && make -j$$(nproc) test_profile_cpu
+	@echo "$(GREEN)✓ Build complete!$(NC)"
+	@echo "$(BLUE)Running profiler (perf record)...$(NC)"
+	@cd $(BUILD_DIR) && perf record -g -o perf.data ./test/test_profile_cpu
+	@echo "$(GREEN)✓ Profiling complete! Results in $(BUILD_DIR)/perf.data$(NC)"
+	@echo "$(YELLOW)Run 'make profile-analyze' to view results$(NC)"
+
+profile-analyze: ## Analyze profiling results (perf report)
+	@echo "$(BLUE)Analyzing profiling data...$(NC)"
+	@cd $(BUILD_DIR) && perf report -g 'graph,0.5,caller' -i perf.data
+	@echo "$(GREEN)✓ Analysis complete!$(NC)"
+
+profile-cpu-simple: ## Build and run profiler without perf (timing only)
+	@echo "$(BLUE)Building with profiling support...$(NC)"
+	@mkdir -p $(BUILD_DIR)
+	@cd $(BUILD_DIR) && cmake -DCMAKE_BUILD_TYPE=Release \
+		-DBUILD_PROFILING=ON \
+		-DBUILD_TESTS_CPU=ON \
+		.. && make -j$$(nproc) test_profile_cpu
+	@echo "$(GREEN)✓ Build complete!$(NC)"
+	@echo "$(BLUE)Running profiler (timing only)...$(NC)"
+	@cd $(BUILD_DIR)/test && ./test_profile_cpu
+	@echo "$(GREEN)✓ Profiling complete! Results in $(BUILD_DIR)/test/profiling_results.*$(NC)"
+
+profile-cpu-flamegraph: ## Generate flamegraph from profiling data
+	@echo "$(BLUE)Generating flamegraph...$(NC)"
+	@cd $(BUILD_DIR) && \
+		perf script -i perf.data | ../scripts/FlameGraph/stackcollapse-perf.pl | \
+		../scripts/FlameGraph/flamegraph.pl > profiling_flamegraph.svg
+	@echo "$(GREEN)✓ Flamegraph generated: $(BUILD_DIR)/profiling_flamegraph.svg$(NC)"
+
 
 # ==============================================================================
 # Run Targets

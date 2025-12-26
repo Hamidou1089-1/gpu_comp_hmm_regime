@@ -12,7 +12,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 option(BUILD_CUDA "Build with CUDA support" OFF)
 option(BUILD_TESTS "Build test suite" ON)
 option(BUILD_BENCHMARKS "Build benchmarks" OFF)
-
+option(BUILD_PROFILING "Build with profiling support (perf/gprof)" OFF)
 # ==============================================================================
 # Configuration des flags de compilation
 # ==============================================================================
@@ -61,6 +61,17 @@ if(BUILD_TESTS)
     add_subdirectory(test)
 endif()
 
+
+
+
+if(BUILD_PROFILING)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fno-omit-frame-pointer")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -g -fno-omit-frame-pointer")
+    message(STATUS "Profiling enabled - perf/gprof compatible build")
+endif()
+
+
+
 # ==============================================================================
 # Résumé de la configuration
 # ==============================================================================
@@ -73,5 +84,6 @@ message(STATUS "C++ compiler    : ${CMAKE_CXX_COMPILER}")
 message(STATUS "CUDA support    : ${BUILD_CUDA}")
 message(STATUS "Tests           : ${BUILD_TESTS}")
 message(STATUS "Benchmarks      : ${BUILD_BENCHMARKS}")
+message(STATUS "Profiling       : ${BUILD_PROFILING}")
 message(STATUS "========================================")
 message(STATUS "")
