@@ -5,10 +5,6 @@
 # CPU implementation
 add_subdirectory(cpu)
 
-# CUDA implementation (if enabled)
-if(BUILD_CUDA)
-    add_subdirectory(cuda)
-endif()
 
 # ==============================================================================
 # Main executable

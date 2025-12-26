@@ -48,12 +48,83 @@ if(BUILD_TESTS_CPU)
     add_cpu_test(test_profile_cpu)
 endif()
 
-# CUDA Tests
 if(BUILD_TESTS_CUDA AND BUILD_CUDA)
     message(STATUS "CUDA tests enabled")
-    add_cuda_test(test_kernels_cuda)
-    add_cuda_test(test_hmm_algorithms_cuda)
+    
+    # Test 1: Scan primitives
+    add_executable(test_scan_primitives_cuda cuda/test_scan_primitives.cu)
+    target_link_libraries(test_scan_primitives_cuda PRIVATE 
+        hmm_kernels  # Teste juste les kernels
+        CUDA::cudart
+    )
+    target_include_directories(test_scan_primitives_cuda PRIVATE
+        ${PROJECT_SOURCE_DIR}/include/cuda
+        ${PROJECT_SOURCE_DIR}/test/common
+    )
+    add_test(NAME test_scan_primitives_cuda COMMAND test_scan_primitives_cuda)
+    
+    # Test 2: Linear algebra GPU
+    add_executable(test_linear_algebra_cuda cuda/test_linear_algebra_cuda.cu)
+    target_link_libraries(test_linear_algebra_cuda PRIVATE 
+        hmm_cuda
+        hmm_cpu
+        CUDA::cudart
+    )
+    target_include_directories(test_linear_algebra_cuda PRIVATE
+        ${PROJECT_SOURCE_DIR}/include/cuda
+        ${PROJECT_SOURCE_DIR}/test/common
+    )
+    add_test(NAME test_linear_algebra_cuda COMMAND test_linear_algebra_cuda)
+    
+    # Test 3: Forward-Backward GPU
+    add_executable(test_forward_backward_cuda cuda/test_forward_backward_cuda.cu)
+    target_link_libraries(test_forward_backward_cuda PRIVATE 
+        hmm_cuda
+        hmm_cpu
+        CUDA::cudart
+    )
+    target_include_directories(test_forward_backward_cuda PRIVATE
+        ${PROJECT_SOURCE_DIR}/include/cuda
+        ${PROJECT_SOURCE_DIR}/test/common
+    )
+    add_test(NAME test_forward_backward_cuda COMMAND test_forward_backward_cuda)
+    
+    # Test 4: Viterbi GPU
+    add_executable(test_viterbi_cuda cuda/test_viterbi_cuda.cu)
+    target_link_libraries(test_viterbi_cuda PRIVATE 
+        hmm_cuda
+        hmm_cpu
+        CUDA::cudart
+    )
+    target_include_directories(test_viterbi_cuda PRIVATE
+        ${PROJECT_SOURCE_DIR}/include/cuda
+        ${PROJECT_SOURCE_DIR}/test/common
+    )
+    add_test(NAME test_viterbi_cuda COMMAND test_viterbi_cuda)
+    
+    # Benchmark CPU vs GPU
+    if(BUILD_BENCHMARKS)
+        add_executable(benchmark_gpu_vs_cpu cuda/benchmark_gpu_vs_cpu.cu)
+        target_link_libraries(benchmark_gpu_vs_cpu PRIVATE 
+            hmm_cuda
+            hmm_cpu
+            CUDA::cudart
+        )
+        target_include_directories(benchmark_gpu_vs_cpu PRIVATE
+            ${PROJECT_SOURCE_DIR}/include/cuda
+            ${PROJECT_SOURCE_DIR}/test/common
+        )
+        add_test(NAME benchmark_gpu_vs_cpu COMMAND benchmark_gpu_vs_cpu)
+        
+        message(STATUS "  - benchmark_gpu_vs_cpu")
+    endif()
+    
+    message(STATUS "  - test_scan_primitives_cuda")
+    message(STATUS "  - test_linear_algebra_cuda")
+    message(STATUS "  - test_forward_backward_cuda")
+    message(STATUS "  - test_viterbi_cuda")
 endif()
+
 
 # ==============================================================================
 # Custom test targets

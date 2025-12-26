@@ -7,7 +7,7 @@ cmake-build-*/
 .idea/
 .venv/
 .notebook/
-scipts/FlameGraph
+scipts/FlameGraph/
 *.swp
 *.swo
 *~

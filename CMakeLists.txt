@@ -56,6 +56,12 @@ include_directories(${PROJECT_SOURCE_DIR}/include/cuda)
 # ==============================================================================
 add_subdirectory(src)
 
+# Ajouter cette ligne si BUILD_CUDA est ON
+if(BUILD_CUDA)
+    add_subdirectory(src/cuda) 
+endif()
+
+
 if(BUILD_TESTS)
     enable_testing()
     add_subdirectory(test)
