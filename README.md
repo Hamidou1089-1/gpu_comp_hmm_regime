@@ -15,6 +15,7 @@ This project implements GPU-accelerated Hidden Markov Models based on **Hassan &
 - CPU and CUDA dual implementation
 
 ## Status
+awDASEIN2001@
 
 **Current:** ✅ CPU implementation complete with full test suite
 **In Progress:** 🔄 CUDA kernel development and optimization

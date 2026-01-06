@@ -1,0 +1,24 @@
+nvcc fatal   : A single input file is required for a non-link phase when an outputfile is specified
+make[2]: *** [src/cuda/kernels/CMakeFiles/hmm_kernels.dir/build.make:77: src/cuda/kernels/CMakeFiles/hmm_kernels.dir/matrix_kernels.cu.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+nvcc fatal   : A single input file is required for a non-link phase when an outputfile is specified
+make[2]: *** [src/cuda/kernels/CMakeFiles/hmm_kernels.dir/build.make:107: src/cuda/kernels/CMakeFiles/hmm_kernels.dir/scan_kernels.cu.o] Error 1
+nvcc fatal   : A single input file is required for a non-link phase when an outputfile is specified
+make[2]: *** [src/cuda/kernels/CMakeFiles/hmm_kernels.dir/build.make:92: src/cuda/kernels/CMakeFiles/hmm_kernels.dir/reduction_kernels.cu.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:254: src/cuda/kernels/CMakeFiles/hmm_kernels.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+/user/7/dialloh/gpu_comp_hmm_regime/test/cuda/test_linear_algebra_gpu.cu:1:10: fatal error: cuda/linear_algebra_gpu.cuh: No such file or directory
+    1 | #include "cuda/linear_algebra_gpu.cuh"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[2]: *** [test/CMakeFiles/test_linear_algebra_gpu.dir/build.make:77: test/CMakeFiles/test_linear_algebra_gpu.dir/cuda/test_linear_algebra_gpu.cu.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:306: test/CMakeFiles/test_linear_algebra_gpu.dir/all] Error 2
+/usr/bin/ld: cannot find -lhmm_cuda: No such file or directory
+collect2: error: ld returned 1 exit status
+make[2]: *** [src/CMakeFiles/hmm_main.dir/build.make:98: src/hmm_main] Error 1
+make[1]: *** [CMakeFiles/Makefile2:175: src/CMakeFiles/hmm_main.dir/all] Error 2
+/usr/bin/ld: cannot find -lhmm_cuda: No such file or directory
+collect2: error: ld returned 1 exit status
+make[2]: *** [test/CMakeFiles/test_forward_backward_gpu.dir/build.make:100: test/test_forward_backward_gpu] Error 1
+make[1]: *** [CMakeFiles/Makefile2:332: test/CMakeFiles/test_forward_backward_gpu.dir/all] Error 2
+make: *** [Makefile:146: all] Error 2

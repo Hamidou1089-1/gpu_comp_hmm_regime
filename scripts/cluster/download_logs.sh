@@ -2,7 +2,7 @@
 # Download latest logs from cluster
 
 REMOTE_USER="dialloh"
-REMOTE_HOST="mash.ensimag.fr"
+REMOTE_HOST="nash.ensimag.fr"
 PROJECT_NAME="gpu_comp_hmm_regime"
 LOCAL_DIR="./results_cluster"
 

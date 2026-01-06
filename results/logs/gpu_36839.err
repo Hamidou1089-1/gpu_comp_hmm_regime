@@ -1,0 +1,8 @@
+/user/7/dialloh/gpu_comp_hmm_regime/test/cuda/test_linear_algebra_gpu.cu:2:10: fatal error: cuda_timing.h: No such file or directory
+    2 | #include "cuda_timing.h"
+      |          ^~~~~~~~~~~~~~~
+compilation terminated.
+make[2]: *** [test/CMakeFiles/test_linear_algebra_gpu.dir/build.make:77: test/CMakeFiles/test_linear_algebra_gpu.dir/cuda/test_linear_algebra_gpu.cu.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:310: test/CMakeFiles/test_linear_algebra_gpu.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:146: all] Error 2

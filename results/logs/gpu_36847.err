@@ -1,0 +1,3 @@
+CUDA kernel error in /user/7/dialloh/gpu_comp_hmm_regime/src/cuda/kernels/matrix_kernels.cu:75: an illegal memory access was encountered
+CUDA kernel error in /user/7/dialloh/gpu_comp_hmm_regime/src/cuda/kernels/matrix_kernels.cu:75: an illegal memory access was encountered
+srun: error: turing-2: task 0: Segmentation fault (core dumped)

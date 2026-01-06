@@ -2,7 +2,7 @@
 # Launch interactive session with GPU for debugging
 
 REMOTE_USER="dialloh"
-REMOTE_HOST="mash.ensimag.fr"
+REMOTE_HOST="nash.ensimag.fr"
 
 echo "Launching interactive GPU session..."
 echo "This will give you a shell with GPU access"

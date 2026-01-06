@@ -1,6 +1,6 @@
 // src/main.cpp
 #include <iostream>
-#include "algo_hmm.hpp"
+#include "algo_hmm_cpu.hpp"
 
 int main() {
     std::cout << "Programme HMM - En développement" << std::endl;

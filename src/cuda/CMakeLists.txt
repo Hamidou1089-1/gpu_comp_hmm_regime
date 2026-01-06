@@ -12,17 +12,16 @@ add_subdirectory(kernels)
 
 # Sources de l'orchestration
 set(CUDA_SOURCES
-    algo_hmm_gpu.cu
-    linear_algebra_gpu.cu
+    ${CMAKE_CURRENT_SOURCE_DIR}/algo_hmm_gpu.cu
 )
 
 # Créer la library
-add_library(hmm_gpu STATIC ${CUDA_SOURCES})
+add_library(hmm_cuda STATIC ${CUDA_SOURCES})
 
 # ==============================================================================
 # Configuration CUDA
 # ==============================================================================
-set_target_properties(hmm_gpu PROPERTIES
+set_target_properties(hmm_cuda PROPERTIES
     CUDA_SEPARABLE_COMPILATION ON
     CUDA_RESOLVE_DEVICE_SYMBOLS ON
     POSITION_INDEPENDENT_CODE ON
@@ -31,16 +30,17 @@ set_target_properties(hmm_gpu PROPERTIES
 # ==============================================================================
 # Include directories
 # ==============================================================================
-target_include_directories(hmm_gpu PUBLIC
+target_include_directories(hmm_cuda PUBLIC
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/include/cpu
     ${PROJECT_SOURCE_DIR}/include/cuda
+    ${PROJECT_SOURCE_DIR}/include/cuda/kernels
 )
 
 # ==============================================================================
 # Options de compilation CUDA
 # ==============================================================================
-target_compile_options(hmm_gpu PRIVATE
+target_compile_options(hmm_cuda PRIVATE
     $<$<COMPILE_LANGUAGE:CUDA>:
         --expt-relaxed-constexpr
         -Xcompiler=-Wall
@@ -48,14 +48,14 @@ target_compile_options(hmm_gpu PRIVATE
 )
 
 # Ajouter les flags définis au niveau root
-target_compile_options(hmm_gpu PRIVATE
+target_compile_options(hmm_cuda PRIVATE
     $<$<COMPILE_LANGUAGE:CUDA>:${CMAKE_CUDA_FLAGS}>
 )
 
 # ==============================================================================
 # Dépendances
 # ==============================================================================
-target_link_libraries(hmm_gpu PUBLIC
+target_link_libraries(hmm_cuda PUBLIC
     hmm_kernels  # Dépend des kernels
     hmm_cpu      # Pour structures partagées
     CUDA::cudart
@@ -65,6 +65,6 @@ target_link_libraries(hmm_gpu PUBLIC
 # ==============================================================================
 # Messages de debug
 # ==============================================================================
-message(STATUS "Building CUDA orchestration library: hmm_gpu")
+message(STATUS "Building CUDA orchestration library: hmm_cuda")
 message(STATUS "  Sources: ${CUDA_SOURCES}")
 message(STATUS "  Dependencies: hmm_kernels, hmm_cpu")

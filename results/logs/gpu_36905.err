@@ -1,0 +1,47 @@
+/user/7/dialloh/gpu_comp_hmm_regime/src/cpu/algo_hmm_cpu.cpp: In function ‘void hmm::cpu::algo::initialize_random(HMMModel&, unsigned int)’:
+/user/7/dialloh/gpu_comp_hmm_regime/src/cpu/algo_hmm_cpu.cpp:402:54: warning: unused parameter ‘seed’ [-Wunused-parameter]
+  402 | void initialize_random(HMMModel& model, unsigned int seed) {
+      |                                         ~~~~~~~~~~~~~^~~~
+/user/7/dialloh/gpu_comp_hmm_regime/test/common/cuda_timing.cuh(61): error: identifier "time_ms" is undefined
+          cudaEvent_t stop; cudaEventCreate(&stop); cudaEventRecord(stop); cudaEventSynchronize(stop); cudaEventElapsedTime(&time_ms, start, stop); cudaEventDestroy(start); cudaEventDestroy(stop);
+                                                                                                                             ^
+
+/user/7/dialloh/gpu_comp_hmm_regime/test/common/cuda_timing.cuh(61): error: identifier "time_ms" is undefined
+          cudaEvent_t stop; cudaEventCreate(&stop); cudaEventRecord(stop); cudaEventSynchronize(stop); cudaEventElapsedTime(&time_ms, start, stop); cudaEventDestroy(start); cudaEventDestroy(stop);
+                                                                                                                             ^
+
+/user/7/dialloh/gpu_comp_hmm_regime/test/cuda/test_baum_welch_gpu.cu(90): error: namespace "std" has no member "memcpy"
+          std::memcpy(L_i, Sigma_i, K * K * sizeof(float));
+               ^
+
+/user/7/dialloh/gpu_comp_hmm_regime/test/common/cuda_timing.cuh(61): error: identifier "time_ms" is undefined
+          cudaEvent_t stop; cudaEventCreate(&stop); cudaEventRecord(stop); cudaEventSynchronize(stop); cudaEventElapsedTime(&time_ms, start, stop); cudaEventDestroy(start); cudaEventDestroy(stop);
+                                                                                                                             ^
+
+/user/7/dialloh/gpu_comp_hmm_regime/test/cuda/test_baum_welch_gpu.cu(164): error: namespace "std" has no member "memcpy"
+      std::memcpy(model_cpu.pi, pi_init.data(), N * sizeof(float));
+           ^
+
+/user/7/dialloh/gpu_comp_hmm_regime/test/cuda/test_baum_welch_gpu.cu(165): error: namespace "std" has no member "memcpy"
+      std::memcpy(model_cpu.A, A_init.data(), N * N * sizeof(float));
+           ^
+
+/user/7/dialloh/gpu_comp_hmm_regime/test/cuda/test_baum_welch_gpu.cu(166): error: namespace "std" has no member "memcpy"
+      std::memcpy(model_cpu.mu, mu_init.data(), N * K * sizeof(float));
+           ^
+
+/user/7/dialloh/gpu_comp_hmm_regime/test/cuda/test_baum_welch_gpu.cu(167): error: namespace "std" has no member "memcpy"
+      std::memcpy(model_cpu.Sigma, Sigma_init.data(), N * K * K * sizeof(float));
+           ^
+
+6 errors detected in the compilation of "/user/7/dialloh/gpu_comp_hmm_regime/test/cuda/test_baum_welch_gpu.cu".
+1 error detected in the compilation of "/user/7/dialloh/gpu_comp_hmm_regime/test/cuda/test_viterbi_gpu.cu".
+1 error detected in the compilation of "/user/7/dialloh/gpu_comp_hmm_regime/test/cuda/test_forward_backward_gpu.cu".
+make[2]: *** [test/CMakeFiles/test_baum_welch_gpu.dir/build.make:77: test/CMakeFiles/test_baum_welch_gpu.dir/cuda/test_baum_welch_gpu.cu.o] Error 2
+make[1]: *** [CMakeFiles/Makefile2:338: test/CMakeFiles/test_baum_welch_gpu.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+make[2]: *** [test/CMakeFiles/test_viterbi_gpu.dir/build.make:77: test/CMakeFiles/test_viterbi_gpu.dir/cuda/test_viterbi_gpu.cu.o] Error 2
+make[1]: *** [CMakeFiles/Makefile2:310: test/CMakeFiles/test_viterbi_gpu.dir/all] Error 2
+make[2]: *** [test/CMakeFiles/test_forward_backward_gpu.dir/build.make:77: test/CMakeFiles/test_forward_backward_gpu.dir/cuda/test_forward_backward_gpu.cu.o] Error 2
+make[1]: *** [CMakeFiles/Makefile2:282: test/CMakeFiles/test_forward_backward_gpu.dir/all] Error 2
+make: *** [Makefile:146: all] Error 2

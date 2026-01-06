@@ -3,7 +3,7 @@
 # ==============================================================================
 
 
-.PHONY: help build build-cuda clean test test-cpu test-gpu benchmark info data venv cluster-submit cluster-status profile-cpu profile-analyze
+.PHONY: help build build-cuda clean test test-cpu test-gpu benchmark info data venv cluster-build cluster-submit cluster-status cluster-logs cluster-clean profile-cpu profile-analyze
 .DEFAULT_GOAL := help
 
 # Colors
@@ -79,12 +79,12 @@ test-cpu: ## Run CPU tests only
 	@cd $(BUILD_DIR) && ctest -R "cpu" --output-on-failure
 	@echo "$(GREEN)✓ CPU tests complete!$(NC)"
 
-test-gpu: ## Run GPU tests only (requires CUDA)
-	@echo "$(BLUE)Running GPU tests...$(NC)"
-	@mkdir -p $(BUILD_DIR)
-	@cd $(BUILD_DIR) && cmake -DBUILD_CUDA=ON -DBUILD_TESTS_CPU=OFF -DBUILD_TESTS_CUDA=ON .. && make -j$$(nproc)
-	@cd $(BUILD_DIR) && ctest -R "cuda" --output-on-failure
-	@echo "$(GREEN)✓ GPU tests complete!$(NC)"
+# test-gpu: ## Run GPU tests only (requires CUDA)
+# 	@echo "$(BLUE)Running GPU tests...$(NC)"
+# 	@mkdir -p $(BUILD_DIR)
+# 	@cd $(BUILD_DIR) && cmake -DBUILD_CUDA=ON -DBUILD_TESTS_CPU=OFF -DBUILD_TESTS_CUDA=ON .. && make -j$$(nproc)
+# 	@cd $(BUILD_DIR) && ctest -R "cuda" --output-on-failure
+# 	@echo "$(GREEN)✓ GPU tests complete!$(NC)"
 
 test-quick: ## Run quick tests only (no stress/benchmark)
 	@echo "$(BLUE)Running quick tests...$(NC)"
@@ -224,32 +224,39 @@ data: ## Prepare financial data (download + process)
 # Cluster Targets (Ensicompute via VPN Ensimag)
 # ==============================================================================
 
-cluster-submit: ## Submit GPU job to ensicompute
-	@echo "$(BLUE)Submitting GPU job...$(NC)"
-	@bash scripts/cluster/submit_gpu_job.sh
+# Build localement avant de submit (recommandé)
+cluster-build:
+	@echo "🔨 Building project locally first..."
+	mkdir -p build && cd build && \
+	cmake -DCMAKE_BUILD_TYPE=Release \
+	      -DBUILD_CUDA=OFF \
+	      -DBUILD_TESTS_CPU=ON \
+	      -DBUILD_TESTS_CUDA=OFF \
+	      .. && \
+	make -j4
+	@echo "✅ Local build successful"
 
-cluster-submit-test: ## Submit specific test (usage: make cluster-submit-test TEST=test_hmm_cuda)
-	@echo "$(BLUE)Submitting test: $(TEST)...$(NC)"
-	@bash scripts/cluster/submit_gpu_job.sh $(TEST)
+# Submit job (avec build préalable)
+cluster-submit: cluster-build
+	@echo "🚀 Submitting job to cluster..."
+	./scripts/cluster/submit_gpu_job.sh $(TEST)
 
-cluster-status: ## Check job status
-	@bash scripts/cluster/check_status.sh
+# Submit job sans rebuild (si tu es sûr que le code est OK)
+cluster-submit-fast:
+	@echo "🚀 Submitting job to cluster (no rebuild)..."
+	./scripts/cluster/submit_gpu_job.sh $(TEST)
 
-cluster-logs: ## Download logs from cluster
-	@bash scripts/cluster/download_logs.sh
+# Check job status
+cluster-status:
+	@ssh dialloh@nash.ensimag.fr 'squeue -u dialloh'
 
-cluster-cancel: ## Cancel all jobs (or specific: make cluster-cancel JOB=12345)
-	@bash scripts/cluster/cancel_jobs.sh $(if $(JOB),$(JOB),all)
+# Download logs
+cluster-logs:
+	@mkdir -p results/logs
+	@rsync -avz dialloh@nash.ensimag.fr:~/gpu_comp_hmm_regime/results/logs/ results/logs/
+	@echo "📥 Logs downloaded to results/logs/"
 
-cluster-interactive: ## Start interactive GPU session (for debugging)
-	@bash scripts/cluster/interactive_gpu.sh
-
-cluster-results: ## Download all results (logs + benchmarks)
-	@echo "$(BLUE)Downloading all results...$(NC)"
-	@rsync -avz dialloh@mash.ensimag.fr:~/gpu_comp_hmm_regime/results/ ./results_cluster/
-	@echo "$(GREEN)✓ Results in results_cluster/$(NC)"
-
-cluster-clean: ## Clean build directory on cluster
-	@echo "$(YELLOW)Cleaning build on cluster...$(NC)"
-	@ssh dialloh@mash.ensimag.fr "cd gpu_comp_hmm_regime && rm -rf build"
-	@echo "$(GREEN)✓ Clean complete$(NC)"
+# Clean remote build
+cluster-clean:
+	@ssh dialloh@nash.ensimag.fr 'cd gpu_comp_hmm_regime && rm -rf build/'
+	@echo "🧹 Remote build directory cleaned"

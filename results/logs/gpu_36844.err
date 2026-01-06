@@ -1,0 +1,16 @@
+/user/7/dialloh/gpu_comp_hmm_regime/src/cuda/kernels/reduction_kernels.cu: In function ‘void hmm::gpu::detail::dot_product_launch(const float*, const float*, float*, int)’:
+/user/7/dialloh/gpu_comp_hmm_regime/src/cuda/kernels/reduction_kernels.cu:132:94: warning: passing argument 3 to ‘restrict’-qualified parameter aliases with arguments 1, 2 [-Wrestrict]
+  132 |             dot_product_kernel_optimized<BLOCK_SIZE><<<1, BLOCK_SIZE>>>(
+      |                                                          ~~~~~~~~~~~~~~~                     ^                                            
+/user/7/dialloh/gpu_comp_hmm_regime/src/cuda/kernels/reduction_kernels.cu: In function ‘void hmm::gpu::detail::reduce_sum_launch(const float*, float*, int)’:
+/user/7/dialloh/gpu_comp_hmm_regime/src/cuda/kernels/reduction_kernels.cu:228:93: warning: passing argument 2 to ‘restrict’-qualified parameter aliases with argument 1 [-Wrestrict]
+  228 |             reduce_sum_kernel_optimized<BLOCK_SIZE><<<1, BLOCK_SIZE>>>(
+      |                                                          ~~~~~~~~~~~~~~                     ^                                  
+/usr/bin/ld: ../src/cuda/kernels/libhmm_kernels.a(reduction_kernels.cu.o): in function `hmm::gpu::detail::dot_product_launch(float const*, float const*, float*, int)':
+tmpxft_00001322_00000000-6_reduction_kernels.cudafe1.cpp:(.text+0x180): multiple definition of `hmm::gpu::detail::dot_product_launch(float const*, float const*, float*, int)'; ../src/cuda/kernels/libhmm_kernels.a(matrix_kernels.cu.o):tmpxft_0000131a_00000000-6_matrix_kernels.cudafe1.cpp:(.text+0x700): first defined here
+/usr/bin/ld: ../src/cuda/kernels/libhmm_kernels.a(reduction_kernels.cu.o): in function `hmm::gpu::detail::reduce_sum_launch(float const*, float*, int)':
+tmpxft_00001322_00000000-6_reduction_kernels.cudafe1.cpp:(.text+0x370): multiple definition of `hmm::gpu::detail::reduce_sum_launch(float const*, float*, int)'; ../src/cuda/kernels/libhmm_kernels.a(matrix_kernels.cu.o):tmpxft_0000131a_00000000-6_matrix_kernels.cudafe1.cpp:(.text+0x9b0): first defined here
+collect2: error: ld returned 1 exit status
+make[2]: *** [test/CMakeFiles/test_linear_algebra_gpu.dir/build.make:106: test/test_linear_algebra_gpu] Error 1
+make[1]: *** [CMakeFiles/Makefile2:310: test/CMakeFiles/test_linear_algebra_gpu.dir/all] Error 2
+make: *** [Makefile:146: all] Error 2

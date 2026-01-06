@@ -2,7 +2,7 @@
 # Check job status on ensicompute
 
 REMOTE_USER="dialloh"
-REMOTE_HOST="mash.ensimag.fr"
+REMOTE_HOST="nash.ensimag.fr"
 
 echo "Job status for $REMOTE_USER:"
 echo ""

@@ -3,8 +3,8 @@
 # ==============================================================================
 
 set(CPU_SOURCES
-    low_level_linear_algebra.cpp
-    algo_hmm.cpp
+    linalg_cpu.cpp
+    algo_hmm_cpu.cpp
 )
 
 add_library(hmm_cpu STATIC ${CPU_SOURCES})

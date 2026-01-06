@@ -7,19 +7,17 @@ if(NOT BUILD_CUDA)
     return()
 endif()
 
-# Sources des kernels
 set(KERNEL_SOURCES
-    matrix_kernels.cu
-    reduction_kernels.cu
-    scan_kernels.cu
-    potential_kernels.cu
-    forward_backward_kernels.cu
-    viterbi_kernels.cu
-    baum_welch_kernels.cu  
+    ${CMAKE_CURRENT_SOURCE_DIR}/scan_kernels.cu
+    ${CMAKE_CURRENT_SOURCE_DIR}/potential_kernels.cu
+    ${CMAKE_CURRENT_SOURCE_DIR}/viterbi_kernels.cu
+    ${CMAKE_CURRENT_SOURCE_DIR}/baum_welch_kernels.cu
 )
 
-# Créer la library
 add_library(hmm_kernels STATIC ${KERNEL_SOURCES})
+
+
+
 
 # ==============================================================================
 # Configuration CUDA
@@ -28,6 +26,8 @@ set_target_properties(hmm_kernels PROPERTIES
     CUDA_SEPARABLE_COMPILATION ON
     CUDA_RESOLVE_DEVICE_SYMBOLS ON
     POSITION_INDEPENDENT_CODE ON
+    CUDA_STANDARD 14                    # ✅ Ajouter ça
+    CUDA_STANDARD_REQUIRED ON           # ✅ Et ça
 )
 
 # ==============================================================================
@@ -37,6 +37,7 @@ target_include_directories(hmm_kernels PUBLIC
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/include/cpu
     ${PROJECT_SOURCE_DIR}/include/cuda
+    ${PROJECT_SOURCE_DIR}/include/cuda/kernels
 )
 
 # ==============================================================================
@@ -50,10 +51,6 @@ target_compile_options(hmm_kernels PRIVATE
     >
 )
 
-# Ajouter les flags définis au niveau root
-target_compile_options(hmm_kernels PRIVATE
-    $<$<COMPILE_LANGUAGE:CUDA>:${CMAKE_CUDA_FLAGS}>
-)
 
 # ==============================================================================
 # Lier CUDA runtime

@@ -10,6 +10,11 @@ import numpy as np
 import sys
 from pathlib import Path
 
+import sys
+import os
+
+#sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 def load_results(csv_path="build/profiling_results.csv"):
     """Charge les résultats du profiling"""
     if not Path(csv_path).exists():

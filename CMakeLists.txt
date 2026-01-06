@@ -36,9 +36,7 @@ if(BUILD_CUDA)
         set(CMAKE_CUDA_ARCHITECTURES 75 80 86)  # Turing, Ampere, Ampere
     endif()
     
-    set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --expt-relaxed-constexpr")
-    set(CMAKE_CUDA_FLAGS_DEBUG "-g -G -O0")
-    set(CMAKE_CUDA_FLAGS_RELEASE "-O3 -use_fast_math")
+    
     
     message(STATUS "CUDA enabled - architectures: ${CMAKE_CUDA_ARCHITECTURES}")
 else()

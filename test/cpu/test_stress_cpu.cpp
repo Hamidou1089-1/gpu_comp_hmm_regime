@@ -5,8 +5,11 @@
 #include <fstream>
 #include <iomanip>
 #include "test_utils.hpp"
-#include "low_level_linear_algebra.hpp"
-#include "algo_hmm.hpp"
+#include "algo_hmm_cpu.hpp"
+#include "linalg_cpu.hpp"
+
+using namespace hmm::cpu::algo;
+using namespace hmm::cpu::linalg;
 
 struct BenchResult {
     int N;
@@ -16,11 +19,11 @@ struct BenchResult {
 // Fonction helper pour le benchmark
 double run_cholesky_bench(int size) {
     std::vector<float> Sigma(size * size);
-    std::vector<float> L(size * size);
+    
     generate_random_pd_matrix(Sigma.data(), size);
 
     auto start = std::chrono::high_resolution_clock::now();
-    bool success = choleskyDecomposition(Sigma.data(), L.data(), size);
+    bool success = cholesky_decomposition(Sigma.data(), size);
     auto end = std::chrono::high_resolution_clock::now();
     
     if (!success) std::cerr << "Erreur: Cholesky a echoue pour N=" << size << std::endl;

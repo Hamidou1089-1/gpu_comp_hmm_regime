@@ -7,7 +7,7 @@
 set -e
 
 REMOTE_USER="dialloh"
-REMOTE_HOST="mash.ensimag.fr"
+REMOTE_HOST="nash.ensimag.fr"
 PROJECT_NAME="gpu_comp_hmm_regime"
 
 TEST_NAME="${1:-all}"  # Par défaut, run tous les tests
@@ -22,7 +22,7 @@ echo "📤 Syncing code to cluster..."
 rsync -avz --exclude 'build/' \
            --exclude '.vscode/' \
            --exclude '.venv/' \
-           --exclude 'data/raw/' \
+           --exclude 'data/' \
            --exclude '*.o' \
            --exclude '*.a' \
            ./ $REMOTE_USER@$REMOTE_HOST:~/$PROJECT_NAME/
@@ -37,7 +37,7 @@ JOB_SCRIPT=$(cat <<'EOFSCRIPT'
 #SBATCH --output=results/logs/gpu_%j.out
 #SBATCH --error=results/logs/gpu_%j.err
 #SBATCH --time=01:00:00
-#SBATCH --partition=gpu
+#SBATCH --partition=rtx6000
 #SBATCH --gres=shard:1           # OBLIGATOIRE pour GPU
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=16GB                # Sinon réserve tout le serveur!
@@ -65,12 +65,12 @@ if [ ! -f "build/src/hmm_main" ]; then
           -DBUILD_TESTS_CPU=OFF \
           -DBUILD_TESTS_CUDA=ON \
           ..
-    make -j4
+    make VERBOSE=1 -j4
     cd ..
     echo "✓ Build complete"
 fi
 
-cd build/tests
+cd build/test
 
 # Vérifier le GPU
 echo ""
@@ -81,13 +81,13 @@ echo ""
 # Run les tests
 if [ "TEST_NAME_PLACEHOLDER" == "all" ]; then
     echo "Running all GPU tests..."
-    for test in test_*_cuda; do
+    for test in test_*_gpu; do
         if [ -x "$test" ]; then
             echo ""
             echo "================================"
             echo "Running: $test"
             echo "================================"
-            srun --gres=shard:1 --mem=16GB ./$test
+            srun --gres=shard:1 --mem=2GB ./$test
         fi
     done
 else

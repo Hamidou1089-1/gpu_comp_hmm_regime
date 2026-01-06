@@ -1,0 +1,52 @@
+==========================================
+GPU Job - HMM Regime Detection
+Job ID: 36380
+Node: turing-4
+Date: Fri Dec 26 17:04:12 CET 2025
+==========================================
+
+Building with CUDA...
+-- CUDA enabled - architectures: 52
+-- Building CUDA kernels library: hmm_kernels
+--   Sources: /user/7/dialloh/gpu_comp_hmm_regime/src/cuda/kernels/matrix_kernels.cu;/user/7/dialloh/gpu_comp_hmm_regime/src/cuda/kernels/reduction_kernels.cu;/user/7/dialloh/gpu_comp_hmm_regime/src/cuda/kernels/scan_kernels.cu;/user/7/dialloh/gpu_comp_hmm_regime/src/cuda/kernels/potential_kernels.cu;/user/7/dialloh/gpu_comp_hmm_regime/src/cuda/kernels/forward_backward_kernels.cu;/user/7/dialloh/gpu_comp_hmm_regime/src/cuda/kernels/viterbi_kernels.cu;/user/7/dialloh/gpu_comp_hmm_regime/src/cuda/kernels/baum_welch_kernels.cu
+--   CUDA Architectures: 52
+-- Building CUDA orchestration library: hmm_cuda
+--   Sources: /user/7/dialloh/gpu_comp_hmm_regime/src/cuda/algo_hmm_gpu.cu;/user/7/dialloh/gpu_comp_hmm_regime/src/cuda/linear_algebra_gpu.cu
+--   Dependencies: hmm_kernels, hmm_cpu
+-- CUDA tests enabled
+--   - test_scan_primitives_gpu
+--   - test_linear_algebra_gpu
+--   - test_forward_backward_gpu
+--   - test_viterbi_gpu
+-- 
+-- ========================================
+-- GPU HMM Regime Detection - Configuration
+-- ========================================
+-- Build type      : Release
+-- C++ compiler    : /usr/bin/c++
+-- CUDA support    : ON
+-- Tests           : ON
+-- Benchmarks      : OFF
+-- Profiling       : OFF
+-- ========================================
+-- 
+-- Configuring done (0.1s)
+-- Generating done (0.2s)
+-- Build files have been written to: /user/7/dialloh/gpu_comp_hmm_regime/build
+[  3%] Building CUDA object src/cuda/kernels/CMakeFiles/hmm_kernels.dir/reduction_kernels.cu.o
+[ 11%] Building CUDA object src/cuda/kernels/CMakeFiles/hmm_kernels.dir/scan_kernels.cu.o
+[ 11%] Building CUDA object src/cuda/kernels/CMakeFiles/hmm_kernels.dir/matrix_kernels.cu.o
+[ 23%] Built target hmm_cpu
+✓ Build complete
+
+GPU Info:
+name, memory.total [MiB], driver_version
+Quadro RTX 6000, 23040 MiB, 580.65.06
+Quadro RTX 6000, 23040 MiB, 580.65.06
+Quadro RTX 6000, 23040 MiB, 580.65.06
+
+Running all GPU tests...
+
+==========================================
+Job completed at Fri Dec 26 17:04:12 CET 2025
+==========================================

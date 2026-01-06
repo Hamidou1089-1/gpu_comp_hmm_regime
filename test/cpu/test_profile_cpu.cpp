@@ -1,6 +1,6 @@
 // test_profile_cpu.cpp
 // Profiling complet des algorithmes HMM CPU
-// Usage: ./test_profile_cpu [export_csv] [export_json]
+
 
 #include <iostream>
 #include <fstream>
@@ -12,8 +12,12 @@
 #include <sstream>
 
 #include "test_utils.hpp"
-#include "low_level_linear_algebra.hpp"
-#include "algo_hmm.hpp"
+#include "linalg_cpu.hpp"
+#include "algo_hmm_cpu.hpp"
+
+using namespace hmm::cpu::linalg;
+using namespace hmm::cpu;
+using namespace hmm::cpu::algo;
 
 // ==============================================================================
 // STRUCTURES DE DONNÉES
@@ -107,7 +111,7 @@ ProfilingResult profile_cholesky(const ProfilingConfig& cfg) {
     // Répéter pour avoir un timing stable
     int repeats = std::max(1, 100 / cfg.K);
     for (int r = 0; r < repeats; r++) {
-        choleskyDecomposition(Sigma.data(), L.data(), cfg.K);
+        cholesky_decomposition(Sigma.data(), cfg.K);
     }
     
     double time_ms = timer.elapsed_ms() / repeats;
@@ -133,26 +137,22 @@ ProfilingResult profile_forward(const ProfilingConfig& cfg) {
     // Générer données synthétiques
     auto data = generate_synthetic_hmm_sequence(cfg.T, cfg.K, cfg.N);
     
-    // Précalculs
-    GaussianParams params;
-    precomputeGaussianParams(params, data.mu, data.Sigma, cfg.N, cfg.K);
     
-    float* log_potentials;
-    compute_log_gaussian_potentials(log_potentials, data.A, params,
-                                     data.pi, data.observations, cfg.T, cfg.K, cfg.N);
+    std::vector<float> log_potentials(cfg.N + (cfg.T - 1)*cfg.N*cfg.N);
+    std::vector<float> workspace(2*cfg.K);
+    compute_log_gaussian_potentials(data.model, data.observations,
+                                     log_potentials.data(), workspace.data());
     
     std::vector<float> log_alpha(cfg.T * cfg.N);
     
     Timer timer;
     timer.start();
-    forward_algorithm_log(log_alpha.data(), log_potentials, cfg.T, cfg.N);
+    forward_algorithm(log_potentials.data(), log_alpha.data(), cfg.T, cfg.N);
     double time_ms = timer.elapsed_ms();
     
     std::cout << " " << time_ms << "ms\n";
     
-    // Cleanup
-    freePotentials(log_potentials);
-    freeGaussianParams(params);
+    
     free_synthetic_data(data);
     
     double flops = (cfg.T * cfg.N * cfg.N) / 1.0;
@@ -172,24 +172,21 @@ ProfilingResult profile_backward(const ProfilingConfig& cfg) {
     
     auto data = generate_synthetic_hmm_sequence(cfg.T, cfg.K, cfg.N);
     
-    GaussianParams params;
-    precomputeGaussianParams(params, data.mu, data.Sigma, cfg.N, cfg.K);
-    
-    float* log_potentials;
-    compute_log_gaussian_potentials(log_potentials, data.A, params,
-                                     data.pi, data.observations, cfg.T, cfg.K, cfg.N);
+    std::vector<float> log_potentials(cfg.N + (cfg.T - 1)*cfg.N*cfg.N);
+    std::vector<float> workspace(2*cfg.K);
+    compute_log_gaussian_potentials(data.model, data.observations,
+                                     log_potentials.data(), workspace.data());
     
     std::vector<float> log_beta(cfg.T * cfg.N);
     
     Timer timer;
     timer.start();
-    backward_algorithm_log(log_beta.data(), log_potentials, cfg.T, cfg.N);
+    backward_algorithm(log_potentials.data(), log_beta.data(), cfg.T, cfg.N);
     double time_ms = timer.elapsed_ms();
     
     std::cout << " " << time_ms << "ms\n";
     
-    freePotentials(log_potentials);
-    freeGaussianParams(params);
+    
     free_synthetic_data(data);
     
     double flops = (cfg.T * cfg.N * cfg.N) / 1.0;
@@ -209,32 +206,31 @@ ProfilingResult profile_smoothing(const ProfilingConfig& cfg) {
     
     auto data = generate_synthetic_hmm_sequence(cfg.T, cfg.K, cfg.N);
     
-    GaussianParams params;
-    precomputeGaussianParams(params, data.mu, data.Sigma, cfg.N, cfg.K);
-    
-    float* log_potentials;
-    compute_log_gaussian_potentials(log_potentials, data.A, params,
-                                     data.pi, data.observations, cfg.T, cfg.K, cfg.N);
+    std::vector<float> log_potentials(cfg.N + (cfg.T - 1)*cfg.N*cfg.N);
+    std::vector<float> workspace(2*cfg.K);
+    compute_log_gaussian_potentials(data.model, data.observations,
+                                     log_potentials.data(), workspace.data());
     
     std::vector<float> log_alpha(cfg.T * cfg.N);
     std::vector<float> log_beta(cfg.T * cfg.N);
     std::vector<float> log_gamma(cfg.T * cfg.N);
     std::vector<float> log_xi((cfg.T - 1) * cfg.N * cfg.N);
     
-    forward_algorithm_log(log_alpha.data(), log_potentials, cfg.T, cfg.N);
-    backward_algorithm_log(log_beta.data(), log_potentials, cfg.T, cfg.N);
+    forward_algorithm(log_potentials.data(), log_alpha.data(), cfg.T, cfg.N);
+    backward_algorithm(log_potentials.data(), log_beta.data(), cfg.T, cfg.N);
     
     Timer timer;
     timer.start();
-    forward_backward_smoothing(log_gamma.data(), log_xi.data(),
-                               log_alpha.data(), log_beta.data(),
-                               log_potentials, cfg.T, cfg.N);
+    compute_gamma(log_alpha.data(),
+                    log_beta.data(),
+                    log_gamma.data(),
+                    cfg.T,
+                    cfg.N);
     double time_ms = timer.elapsed_ms();
     
     std::cout << " " << time_ms << "ms\n";
     
-    freePotentials(log_potentials);
-    freeGaussianParams(params);
+    
     free_synthetic_data(data);
     
     double flops = (cfg.T * cfg.N * cfg.N) / 1.0;
@@ -254,25 +250,22 @@ ProfilingResult profile_viterbi(const ProfilingConfig& cfg) {
     
     auto data = generate_synthetic_hmm_sequence(cfg.T, cfg.K, cfg.N);
     
-    GaussianParams params;
-    precomputeGaussianParams(params, data.mu, data.Sigma, cfg.N, cfg.K);
-    
-    float* log_potentials;
-    compute_log_gaussian_potentials(log_potentials, data.A, params,
-                                     data.pi, data.observations, cfg.T, cfg.K, cfg.N);
+    std::vector<float> log_potentials(cfg.N + (cfg.T - 1)*cfg.N*cfg.N);
+    std::vector<float> workspace(2*cfg.K);
+    compute_log_gaussian_potentials(data.model, data.observations,
+                                     log_potentials.data(), workspace.data());
     
     std::vector<int> best_path(cfg.T);
-    float log_prob;
+    
     
     Timer timer;
     timer.start();
-    viterbi_log(best_path.data(), &log_prob, log_potentials, cfg.T, cfg.N);
+    viterbi_algorithm(log_potentials.data(), best_path.data(), cfg.T, cfg.N);
     double time_ms = timer.elapsed_ms();
     
     std::cout << " " << time_ms << "ms\n";
     
-    freePotentials(log_potentials);
-    freeGaussianParams(params);
+    
     free_synthetic_data(data);
     
     double flops = (cfg.T * cfg.N * cfg.N) / 1.0;
@@ -298,19 +291,20 @@ ProfilingResult profile_em_fixed_iters(const ProfilingConfig& cfg, int num_iters
     std::vector<float> pi(cfg.N);
     std::vector<float> mu(cfg.N * cfg.K);
     std::vector<float> Sigma(cfg.N * cfg.K * cfg.K);
+    std::vector<float> workspace(2*cfg.K);
     
     generate_transition_matrix(A.data(), cfg.N, 0.7f);
     generate_initial_distribution(pi.data(), cfg.N);
     generate_separated_means(mu.data(), cfg.N, cfg.K, 3.0f);
     generate_covariance_matrices(Sigma.data(), cfg.N, cfg.K, 1.0f, 0.3f);
+
+
     
     Timer timer;
     timer.start();
     
     // EM avec nombre fixe d'itérations
-    em_algorithm(A.data(), pi.data(), mu.data(), Sigma.data(),
-                 data.observations, cfg.T, cfg.K, cfg.N,
-                 num_iters, 1e-10);  // Tolerance très faible pour forcer num_iters
+    baum_welch_train(data.model, data.observations, num_iters, 1e-7, workspace.data());
     
     double time_ms = timer.elapsed_ms();
     

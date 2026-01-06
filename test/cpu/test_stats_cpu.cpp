@@ -1,7 +1,11 @@
 #include <iostream>
 #include "test_utils.hpp"
-#include "algo_hmm.hpp"
-#include "low_level_linear_algebra.hpp"
+#include "algo_hmm_cpu.hpp"
+#include "linalg_cpu.hpp"
+
+using namespace hmm::cpu::algo;
+using namespace hmm::cpu::linalg;
+
 
 void test_log_sum_exp() {
     std::cout << "\n--- Test LogSumExp ---\n";
@@ -25,7 +29,7 @@ void test_gaussian_pdf() {
     float logDet = 0.0f;
     float workspace[2]; // Besoin de 2*K
 
-    float res = log_multivariate_normal_pdf_cholesky(x, mu, L, logDet, K, workspace);
+    float res = log_multivariate_normal_pdf(x, mu, L, logDet, K, workspace);
     
     // Valeur théorique : -0.5 * (1 * log(2pi) + 0 + 0) = -0.5 * 1.83787...
     float expected = -0.9189385f;

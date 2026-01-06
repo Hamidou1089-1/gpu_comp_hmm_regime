@@ -1,0 +1,491 @@
+==========================================
+GPU Job - HMM Regime Detection
+Job ID: 36906
+Node: turing-2
+Date: Tue Jan  6 16:47:35 CET 2026
+==========================================
+
+Building with CUDA...
+-- The CXX compiler identification is GNU 13.3.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- The CUDA compiler identification is NVIDIA 12.6.85
+-- Detecting CUDA compiler ABI info
+-- Detecting CUDA compiler ABI info - done
+-- Check for working CUDA compiler: /usr/local/cuda-12.6/bin/nvcc - skipped
+-- Detecting CUDA compile features
+-- Detecting CUDA compile features - done
+-- Found CUDAToolkit: /usr/local/cuda-12.6/targets/x86_64-linux/include (found version "12.6.85") 
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- CUDA enabled - architectures: 52
+-- Building CUDA kernels library: hmm_kernels
+--   Sources: /user/7/dialloh/gpu_comp_hmm_regime/src/cuda/kernels/scan_kernels.cu;/user/7/dialloh/gpu_comp_hmm_regime/src/cuda/kernels/potential_kernels.cu;/user/7/dialloh/gpu_comp_hmm_regime/src/cuda/kernels/viterbi_kernels.cu;/user/7/dialloh/gpu_comp_hmm_regime/src/cuda/kernels/baum_welch_kernels.cu
+--   CUDA Architectures: 52
+-- Building CUDA orchestration library: hmm_cuda
+--   Sources: /user/7/dialloh/gpu_comp_hmm_regime/src/cuda/algo_hmm_gpu.cu
+--   Dependencies: hmm_kernels, hmm_cpu
+-- CUDA tests enabled
+--   - test_forward_backward_gpu
+--   - test_viterbi_gpu
+-- 
+-- ========================================
+-- GPU HMM Regime Detection - Configuration
+-- ========================================
+-- Build type      : Release
+-- C++ compiler    : /usr/bin/c++
+-- CUDA support    : ON
+-- Tests           : ON
+-- Benchmarks      : OFF
+-- Profiling       : OFF
+-- ========================================
+-- 
+-- Configuring done (3.5s)
+-- Generating done (0.2s)
+-- Build files have been written to: /user/7/dialloh/gpu_comp_hmm_regime/build
+/usr/bin/cmake -S/user/7/dialloh/gpu_comp_hmm_regime -B/user/7/dialloh/gpu_comp_hmm_regime/build --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/cmake -E cmake_progress_start /user/7/dialloh/gpu_comp_hmm_regime/build/CMakeFiles /user/7/dialloh/gpu_comp_hmm_regime/build//CMakeFiles/progress.marks
+make  -f CMakeFiles/Makefile2 all
+make[1]: Entering directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+make  -f src/cuda/kernels/CMakeFiles/hmm_kernels.dir/build.make src/cuda/kernels/CMakeFiles/hmm_kernels.dir/depend
+make  -f src/cpu/CMakeFiles/hmm_cpu.dir/build.make src/cpu/CMakeFiles/hmm_cpu.dir/depend
+make[2]: Entering directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+cd /user/7/dialloh/gpu_comp_hmm_regime/build && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /user/7/dialloh/gpu_comp_hmm_regime /user/7/dialloh/gpu_comp_hmm_regime/src/cuda/kernels /user/7/dialloh/gpu_comp_hmm_regime/build /user/7/dialloh/gpu_comp_hmm_regime/build/src/cuda/kernels /user/7/dialloh/gpu_comp_hmm_regime/build/src/cuda/kernels/CMakeFiles/hmm_kernels.dir/DependInfo.cmake "--color="
+make[2]: Entering directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+cd /user/7/dialloh/gpu_comp_hmm_regime/build && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /user/7/dialloh/gpu_comp_hmm_regime /user/7/dialloh/gpu_comp_hmm_regime/src/cpu /user/7/dialloh/gpu_comp_hmm_regime/build /user/7/dialloh/gpu_comp_hmm_regime/build/src/cpu /user/7/dialloh/gpu_comp_hmm_regime/build/src/cpu/CMakeFiles/hmm_cpu.dir/DependInfo.cmake "--color="
+make[2]: Leaving directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+make  -f src/cuda/kernels/CMakeFiles/hmm_kernels.dir/build.make src/cuda/kernels/CMakeFiles/hmm_kernels.dir/build
+make[2]: Leaving directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+make  -f src/cpu/CMakeFiles/hmm_cpu.dir/build.make src/cpu/CMakeFiles/hmm_cpu.dir/build
+make[2]: Entering directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+make[2]: Entering directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+[ 10%] Building CUDA object src/cuda/kernels/CMakeFiles/hmm_kernels.dir/viterbi_kernels.cu.o
+[ 10%] Building CUDA object src/cuda/kernels/CMakeFiles/hmm_kernels.dir/scan_kernels.cu.o
+cd /user/7/dialloh/gpu_comp_hmm_regime/build/src/cuda/kernels && /usr/local/cuda-12.6/bin/nvcc -forward-unknown-to-host-compiler  --options-file CMakeFiles/hmm_kernels.dir/includes_CUDA.rsp -O3 -DNDEBUG -std=c++14 "--generate-code=arch=compute_52,code=[compute_52,sm_52]" -Xcompiler=-fPIC --expt-relaxed-constexpr -Xcompiler=-Wall -Xcompiler=-Wextra -MD -MT src/cuda/kernels/CMakeFiles/hmm_kernels.dir/viterbi_kernels.cu.o -MF CMakeFiles/hmm_kernels.dir/viterbi_kernels.cu.o.d -x cu -rdc=true -c /user/7/dialloh/gpu_comp_hmm_regime/src/cuda/kernels/viterbi_kernels.cu -o CMakeFiles/hmm_kernels.dir/viterbi_kernels.cu.o
+cd /user/7/dialloh/gpu_comp_hmm_regime/build/src/cuda/kernels && /usr/local/cuda-12.6/bin/nvcc -forward-unknown-to-host-compiler  --options-file CMakeFiles/hmm_kernels.dir/includes_CUDA.rsp -O3 -DNDEBUG -std=c++14 "--generate-code=arch=compute_52,code=[compute_52,sm_52]" -Xcompiler=-fPIC --expt-relaxed-constexpr -Xcompiler=-Wall -Xcompiler=-Wextra -MD -MT src/cuda/kernels/CMakeFiles/hmm_kernels.dir/scan_kernels.cu.o -MF CMakeFiles/hmm_kernels.dir/scan_kernels.cu.o.d -x cu -rdc=true -c /user/7/dialloh/gpu_comp_hmm_regime/src/cuda/kernels/scan_kernels.cu -o CMakeFiles/hmm_kernels.dir/scan_kernels.cu.o
+[ 20%] Building CUDA object src/cuda/kernels/CMakeFiles/hmm_kernels.dir/potential_kernels.cu.o
+[ 20%] Building CXX object src/cpu/CMakeFiles/hmm_cpu.dir/linalg_cpu.cpp.o
+cd /user/7/dialloh/gpu_comp_hmm_regime/build/src/cuda/kernels && /usr/local/cuda-12.6/bin/nvcc -forward-unknown-to-host-compiler  --options-file CMakeFiles/hmm_kernels.dir/includes_CUDA.rsp -O3 -DNDEBUG -std=c++14 "--generate-code=arch=compute_52,code=[compute_52,sm_52]" -Xcompiler=-fPIC --expt-relaxed-constexpr -Xcompiler=-Wall -Xcompiler=-Wextra -MD -MT src/cuda/kernels/CMakeFiles/hmm_kernels.dir/potential_kernels.cu.o -MF CMakeFiles/hmm_kernels.dir/potential_kernels.cu.o.d -x cu -rdc=true -c /user/7/dialloh/gpu_comp_hmm_regime/src/cuda/kernels/potential_kernels.cu -o CMakeFiles/hmm_kernels.dir/potential_kernels.cu.o
+cd /user/7/dialloh/gpu_comp_hmm_regime/build/src/cpu && /usr/bin/c++  -I/user/7/dialloh/gpu_comp_hmm_regime/include/cpu -I/user/7/dialloh/gpu_comp_hmm_regime/include/cuda -Wall -Wextra -O3 -march=native -DNDEBUG -std=c++17 -Wall -Wextra -Wpedantic -O3 -march=native -ffast-math -MD -MT src/cpu/CMakeFiles/hmm_cpu.dir/linalg_cpu.cpp.o -MF CMakeFiles/hmm_cpu.dir/linalg_cpu.cpp.o.d -o CMakeFiles/hmm_cpu.dir/linalg_cpu.cpp.o -c /user/7/dialloh/gpu_comp_hmm_regime/src/cpu/linalg_cpu.cpp
+[ 25%] Building CXX object src/cpu/CMakeFiles/hmm_cpu.dir/algo_hmm_cpu.cpp.o
+cd /user/7/dialloh/gpu_comp_hmm_regime/build/src/cpu && /usr/bin/c++  -I/user/7/dialloh/gpu_comp_hmm_regime/include/cpu -I/user/7/dialloh/gpu_comp_hmm_regime/include/cuda -Wall -Wextra -O3 -march=native -DNDEBUG -std=c++17 -Wall -Wextra -Wpedantic -O3 -march=native -ffast-math -MD -MT src/cpu/CMakeFiles/hmm_cpu.dir/algo_hmm_cpu.cpp.o -MF CMakeFiles/hmm_cpu.dir/algo_hmm_cpu.cpp.o.d -o CMakeFiles/hmm_cpu.dir/algo_hmm_cpu.cpp.o -c /user/7/dialloh/gpu_comp_hmm_regime/src/cpu/algo_hmm_cpu.cpp
+[ 30%] Building CUDA object src/cuda/kernels/CMakeFiles/hmm_kernels.dir/baum_welch_kernels.cu.o
+cd /user/7/dialloh/gpu_comp_hmm_regime/build/src/cuda/kernels && /usr/local/cuda-12.6/bin/nvcc -forward-unknown-to-host-compiler  --options-file CMakeFiles/hmm_kernels.dir/includes_CUDA.rsp -O3 -DNDEBUG -std=c++14 "--generate-code=arch=compute_52,code=[compute_52,sm_52]" -Xcompiler=-fPIC --expt-relaxed-constexpr -Xcompiler=-Wall -Xcompiler=-Wextra -MD -MT src/cuda/kernels/CMakeFiles/hmm_kernels.dir/baum_welch_kernels.cu.o -MF CMakeFiles/hmm_kernels.dir/baum_welch_kernels.cu.o.d -x cu -rdc=true -c /user/7/dialloh/gpu_comp_hmm_regime/src/cuda/kernels/baum_welch_kernels.cu -o CMakeFiles/hmm_kernels.dir/baum_welch_kernels.cu.o
+[ 35%] Linking CXX static library libhmm_cpu.a
+cd /user/7/dialloh/gpu_comp_hmm_regime/build/src/cpu && /usr/bin/cmake -P CMakeFiles/hmm_cpu.dir/cmake_clean_target.cmake
+cd /user/7/dialloh/gpu_comp_hmm_regime/build/src/cpu && /usr/bin/cmake -E cmake_link_script CMakeFiles/hmm_cpu.dir/link.txt --verbose=1
+/usr/bin/ar qc libhmm_cpu.a CMakeFiles/hmm_cpu.dir/linalg_cpu.cpp.o CMakeFiles/hmm_cpu.dir/algo_hmm_cpu.cpp.o
+/usr/bin/ranlib libhmm_cpu.a
+make[2]: Leaving directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+[ 35%] Built target hmm_cpu
+[ 40%] Linking CUDA device code CMakeFiles/hmm_kernels.dir/cmake_device_link.o
+cd /user/7/dialloh/gpu_comp_hmm_regime/build/src/cuda/kernels && /usr/bin/cmake -E cmake_link_script CMakeFiles/hmm_kernels.dir/dlink.txt --verbose=1
+/usr/local/cuda-12.6/bin/nvcc -forward-unknown-to-host-compiler -O3 -DNDEBUG "--generate-code=arch=compute_52,code=[compute_52,sm_52]" -Xcompiler=-fPIC -Wno-deprecated-gpu-targets -shared -dlink --options-file CMakeFiles/hmm_kernels.dir/deviceObjects1.rsp -o CMakeFiles/hmm_kernels.dir/cmake_device_link.o --options-file CMakeFiles/hmm_kernels.dir/deviceLinkLibs.rsp
+[ 45%] Linking CUDA static library libhmm_kernels.a
+cd /user/7/dialloh/gpu_comp_hmm_regime/build/src/cuda/kernels && /usr/bin/cmake -P CMakeFiles/hmm_kernels.dir/cmake_clean_target.cmake
+cd /user/7/dialloh/gpu_comp_hmm_regime/build/src/cuda/kernels && /usr/bin/cmake -E cmake_link_script CMakeFiles/hmm_kernels.dir/link.txt --verbose=1
+/usr/bin/ar qc libhmm_kernels.a CMakeFiles/hmm_kernels.dir/scan_kernels.cu.o CMakeFiles/hmm_kernels.dir/potential_kernels.cu.o CMakeFiles/hmm_kernels.dir/viterbi_kernels.cu.o CMakeFiles/hmm_kernels.dir/baum_welch_kernels.cu.o
+/usr/bin/ar q libhmm_kernels.a CMakeFiles/hmm_kernels.dir/cmake_device_link.o
+/usr/bin/ranlib libhmm_kernels.a
+make[2]: Leaving directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+[ 45%] Built target hmm_kernels
+make  -f src/cuda/CMakeFiles/hmm_cuda.dir/build.make src/cuda/CMakeFiles/hmm_cuda.dir/depend
+make[2]: Entering directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+cd /user/7/dialloh/gpu_comp_hmm_regime/build && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /user/7/dialloh/gpu_comp_hmm_regime /user/7/dialloh/gpu_comp_hmm_regime/src/cuda /user/7/dialloh/gpu_comp_hmm_regime/build /user/7/dialloh/gpu_comp_hmm_regime/build/src/cuda /user/7/dialloh/gpu_comp_hmm_regime/build/src/cuda/CMakeFiles/hmm_cuda.dir/DependInfo.cmake "--color="
+make[2]: Leaving directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+make  -f src/cuda/CMakeFiles/hmm_cuda.dir/build.make src/cuda/CMakeFiles/hmm_cuda.dir/build
+make[2]: Entering directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+[ 50%] Building CUDA object src/cuda/CMakeFiles/hmm_cuda.dir/algo_hmm_gpu.cu.o
+cd /user/7/dialloh/gpu_comp_hmm_regime/build/src/cuda && /usr/local/cuda-12.6/bin/nvcc -forward-unknown-to-host-compiler  --options-file CMakeFiles/hmm_cuda.dir/includes_CUDA.rsp -O3 -DNDEBUG -std=c++17 "--generate-code=arch=compute_52,code=[compute_52,sm_52]" -Xcompiler=-fPIC --expt-relaxed-constexpr -Xcompiler=-Wall -MD -MT src/cuda/CMakeFiles/hmm_cuda.dir/algo_hmm_gpu.cu.o -MF CMakeFiles/hmm_cuda.dir/algo_hmm_gpu.cu.o.d -x cu -rdc=true -c /user/7/dialloh/gpu_comp_hmm_regime/src/cuda/algo_hmm_gpu.cu -o CMakeFiles/hmm_cuda.dir/algo_hmm_gpu.cu.o
+[ 55%] Linking CUDA device code CMakeFiles/hmm_cuda.dir/cmake_device_link.o
+cd /user/7/dialloh/gpu_comp_hmm_regime/build/src/cuda && /usr/bin/cmake -E cmake_link_script CMakeFiles/hmm_cuda.dir/dlink.txt --verbose=1
+/usr/local/cuda-12.6/bin/nvcc -forward-unknown-to-host-compiler -O3 -DNDEBUG "--generate-code=arch=compute_52,code=[compute_52,sm_52]" -Xcompiler=-fPIC -Wno-deprecated-gpu-targets -shared -dlink --options-file CMakeFiles/hmm_cuda.dir/deviceObjects1.rsp -o CMakeFiles/hmm_cuda.dir/cmake_device_link.o --options-file CMakeFiles/hmm_cuda.dir/deviceLinkLibs.rsp
+[ 60%] Linking CXX static library libhmm_cuda.a
+cd /user/7/dialloh/gpu_comp_hmm_regime/build/src/cuda && /usr/bin/cmake -P CMakeFiles/hmm_cuda.dir/cmake_clean_target.cmake
+cd /user/7/dialloh/gpu_comp_hmm_regime/build/src/cuda && /usr/bin/cmake -E cmake_link_script CMakeFiles/hmm_cuda.dir/link.txt --verbose=1
+/usr/bin/ar qc libhmm_cuda.a CMakeFiles/hmm_cuda.dir/algo_hmm_gpu.cu.o
+/usr/bin/ar q libhmm_cuda.a CMakeFiles/hmm_cuda.dir/cmake_device_link.o
+/usr/bin/ranlib libhmm_cuda.a
+make[2]: Leaving directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+[ 60%] Built target hmm_cuda
+make  -f src/CMakeFiles/hmm_main.dir/build.make src/CMakeFiles/hmm_main.dir/depend
+make  -f test/CMakeFiles/test_forward_backward_gpu.dir/build.make test/CMakeFiles/test_forward_backward_gpu.dir/depend
+make  -f test/CMakeFiles/test_viterbi_gpu.dir/build.make test/CMakeFiles/test_viterbi_gpu.dir/depend
+make  -f test/CMakeFiles/test_baum_welch_gpu.dir/build.make test/CMakeFiles/test_baum_welch_gpu.dir/depend
+make[2]: Entering directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+cd /user/7/dialloh/gpu_comp_hmm_regime/build && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /user/7/dialloh/gpu_comp_hmm_regime /user/7/dialloh/gpu_comp_hmm_regime/test /user/7/dialloh/gpu_comp_hmm_regime/build /user/7/dialloh/gpu_comp_hmm_regime/build/test /user/7/dialloh/gpu_comp_hmm_regime/build/test/CMakeFiles/test_forward_backward_gpu.dir/DependInfo.cmake "--color="
+make[2]: Entering directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+cd /user/7/dialloh/gpu_comp_hmm_regime/build && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /user/7/dialloh/gpu_comp_hmm_regime /user/7/dialloh/gpu_comp_hmm_regime/src /user/7/dialloh/gpu_comp_hmm_regime/build /user/7/dialloh/gpu_comp_hmm_regime/build/src /user/7/dialloh/gpu_comp_hmm_regime/build/src/CMakeFiles/hmm_main.dir/DependInfo.cmake "--color="
+make[2]: Entering directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+make[2]: Entering directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+cd /user/7/dialloh/gpu_comp_hmm_regime/build && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /user/7/dialloh/gpu_comp_hmm_regime /user/7/dialloh/gpu_comp_hmm_regime/test /user/7/dialloh/gpu_comp_hmm_regime/build /user/7/dialloh/gpu_comp_hmm_regime/build/test /user/7/dialloh/gpu_comp_hmm_regime/build/test/CMakeFiles/test_baum_welch_gpu.dir/DependInfo.cmake "--color="
+cd /user/7/dialloh/gpu_comp_hmm_regime/build && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /user/7/dialloh/gpu_comp_hmm_regime /user/7/dialloh/gpu_comp_hmm_regime/test /user/7/dialloh/gpu_comp_hmm_regime/build /user/7/dialloh/gpu_comp_hmm_regime/build/test /user/7/dialloh/gpu_comp_hmm_regime/build/test/CMakeFiles/test_viterbi_gpu.dir/DependInfo.cmake "--color="
+make[2]: Leaving directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+make  -f test/CMakeFiles/test_forward_backward_gpu.dir/build.make test/CMakeFiles/test_forward_backward_gpu.dir/build
+make[2]: Leaving directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+make[2]: Entering directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+make  -f src/CMakeFiles/hmm_main.dir/build.make src/CMakeFiles/hmm_main.dir/build
+make[2]: Leaving directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+make  -f test/CMakeFiles/test_baum_welch_gpu.dir/build.make test/CMakeFiles/test_baum_welch_gpu.dir/build
+make[2]: Leaving directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+make  -f test/CMakeFiles/test_viterbi_gpu.dir/build.make test/CMakeFiles/test_viterbi_gpu.dir/build
+make[2]: Entering directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+make[2]: Entering directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+make[2]: Entering directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+[ 65%] Building CUDA object test/CMakeFiles/test_forward_backward_gpu.dir/cuda/test_forward_backward_gpu.cu.o
+cd /user/7/dialloh/gpu_comp_hmm_regime/build/test && /usr/local/cuda-12.6/bin/nvcc -forward-unknown-to-host-compiler  --options-file CMakeFiles/test_forward_backward_gpu.dir/includes_CUDA.rsp -O3 -DNDEBUG -std=c++17 "--generate-code=arch=compute_52,code=[compute_52,sm_52]" -MD -MT test/CMakeFiles/test_forward_backward_gpu.dir/cuda/test_forward_backward_gpu.cu.o -MF CMakeFiles/test_forward_backward_gpu.dir/cuda/test_forward_backward_gpu.cu.o.d -x cu -c /user/7/dialloh/gpu_comp_hmm_regime/test/cuda/test_forward_backward_gpu.cu -o CMakeFiles/test_forward_backward_gpu.dir/cuda/test_forward_backward_gpu.cu.o
+[ 70%] Building CXX object src/CMakeFiles/hmm_main.dir/main.cpp.o
+cd /user/7/dialloh/gpu_comp_hmm_regime/build/src && /usr/bin/c++ -DUSE_CUDA -I/user/7/dialloh/gpu_comp_hmm_regime/include/cpu -I/user/7/dialloh/gpu_comp_hmm_regime/include/cuda -I/user/7/dialloh/gpu_comp_hmm_regime/include -I/user/7/dialloh/gpu_comp_hmm_regime/include/cuda/kernels -isystem /usr/local/cuda-12.6/targets/x86_64-linux/include -Wall -Wextra -O3 -march=native -DNDEBUG -std=c++17 -MD -MT src/CMakeFiles/hmm_main.dir/main.cpp.o -MF CMakeFiles/hmm_main.dir/main.cpp.o.d -o CMakeFiles/hmm_main.dir/main.cpp.o -c /user/7/dialloh/gpu_comp_hmm_regime/src/main.cpp
+[ 80%] Building CUDA object test/CMakeFiles/test_viterbi_gpu.dir/cuda/test_viterbi_gpu.cu.o
+[ 80%] Building CUDA object test/CMakeFiles/test_baum_welch_gpu.dir/cuda/test_baum_welch_gpu.cu.o
+cd /user/7/dialloh/gpu_comp_hmm_regime/build/test && /usr/local/cuda-12.6/bin/nvcc -forward-unknown-to-host-compiler  --options-file CMakeFiles/test_viterbi_gpu.dir/includes_CUDA.rsp -O3 -DNDEBUG -std=c++17 "--generate-code=arch=compute_52,code=[compute_52,sm_52]" -MD -MT test/CMakeFiles/test_viterbi_gpu.dir/cuda/test_viterbi_gpu.cu.o -MF CMakeFiles/test_viterbi_gpu.dir/cuda/test_viterbi_gpu.cu.o.d -x cu -c /user/7/dialloh/gpu_comp_hmm_regime/test/cuda/test_viterbi_gpu.cu -o CMakeFiles/test_viterbi_gpu.dir/cuda/test_viterbi_gpu.cu.o
+cd /user/7/dialloh/gpu_comp_hmm_regime/build/test && /usr/local/cuda-12.6/bin/nvcc -forward-unknown-to-host-compiler  --options-file CMakeFiles/test_baum_welch_gpu.dir/includes_CUDA.rsp -O3 -DNDEBUG -std=c++17 "--generate-code=arch=compute_52,code=[compute_52,sm_52]" -MD -MT test/CMakeFiles/test_baum_welch_gpu.dir/cuda/test_baum_welch_gpu.cu.o -MF CMakeFiles/test_baum_welch_gpu.dir/cuda/test_baum_welch_gpu.cu.o.d -x cu -c /user/7/dialloh/gpu_comp_hmm_regime/test/cuda/test_baum_welch_gpu.cu -o CMakeFiles/test_baum_welch_gpu.dir/cuda/test_baum_welch_gpu.cu.o
+[ 85%] Linking CXX executable hmm_main
+cd /user/7/dialloh/gpu_comp_hmm_regime/build/src && /usr/bin/cmake -E cmake_link_script CMakeFiles/hmm_main.dir/link.txt --verbose=1
+/usr/bin/c++  -Wall -Wextra -O3 -march=native -DNDEBUG CMakeFiles/hmm_main.dir/main.cpp.o -o hmm_main   -L/usr/local/cuda-12.6/targets/x86_64-linux/lib/stubs  -L/usr/local/cuda-12.6/targets/x86_64-linux/lib  -Wl,-rpath,/usr/local/cuda-12.6/targets/x86_64-linux/lib: cpu/libhmm_cpu.a cuda/libhmm_cuda.a cpu/libhmm_cpu.a -lm cuda/kernels/libhmm_kernels.a /usr/local/cuda-12.6/targets/x86_64-linux/lib/libcudart.so /usr/local/cuda-12.6/targets/x86_64-linux/lib/libcublas.so /usr/local/cuda-12.6/targets/x86_64-linux/lib/libcublasLt.so /usr/local/cuda-12.6/targets/x86_64-linux/lib/libculibos.a -lcudadevrt -lcudart_static -lrt -lpthread -ldl 
+make[2]: Leaving directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+[ 85%] Built target hmm_main
+[ 90%] Linking CXX executable test_viterbi_gpu
+cd /user/7/dialloh/gpu_comp_hmm_regime/build/test && /usr/bin/cmake -E cmake_link_script CMakeFiles/test_viterbi_gpu.dir/link.txt --verbose=1
+/usr/bin/c++  -Wall -Wextra -O3 -march=native -DNDEBUG CMakeFiles/test_viterbi_gpu.dir/cuda/test_viterbi_gpu.cu.o -o test_viterbi_gpu   -L/usr/local/cuda-12.6/targets/x86_64-linux/lib/stubs  -L/usr/local/cuda-12.6/targets/x86_64-linux/lib  -Wl,-rpath,/usr/local/cuda-12.6/targets/x86_64-linux/lib ../src/cuda/libhmm_cuda.a ../src/cpu/libhmm_cpu.a -lm ../src/cuda/kernels/libhmm_kernels.a /usr/local/cuda-12.6/targets/x86_64-linux/lib/libcudart.so /usr/local/cuda-12.6/targets/x86_64-linux/lib/libcublas.so /usr/local/cuda-12.6/targets/x86_64-linux/lib/libcublasLt.so /usr/local/cuda-12.6/targets/x86_64-linux/lib/libculibos.a -lcudadevrt -lcudart_static -lrt -lpthread -ldl 
+[ 95%] Linking CXX executable test_forward_backward_gpu
+cd /user/7/dialloh/gpu_comp_hmm_regime/build/test && /usr/bin/cmake -E cmake_link_script CMakeFiles/test_forward_backward_gpu.dir/link.txt --verbose=1
+/usr/bin/c++  -Wall -Wextra -O3 -march=native -DNDEBUG CMakeFiles/test_forward_backward_gpu.dir/cuda/test_forward_backward_gpu.cu.o -o test_forward_backward_gpu   -L/usr/local/cuda-12.6/targets/x86_64-linux/lib/stubs  -L/usr/local/cuda-12.6/targets/x86_64-linux/lib  -Wl,-rpath,/usr/local/cuda-12.6/targets/x86_64-linux/lib ../src/cuda/libhmm_cuda.a ../src/cpu/libhmm_cpu.a -lm ../src/cuda/kernels/libhmm_kernels.a /usr/local/cuda-12.6/targets/x86_64-linux/lib/libcudart.so /usr/local/cuda-12.6/targets/x86_64-linux/lib/libcublas.so /usr/local/cuda-12.6/targets/x86_64-linux/lib/libcublasLt.so /usr/local/cuda-12.6/targets/x86_64-linux/lib/libculibos.a -lcudadevrt -lcudart_static -lrt -lpthread -ldl 
+make[2]: Leaving directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+make[2]: Leaving directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+[ 95%] Built target test_forward_backward_gpu
+[ 95%] Built target test_viterbi_gpu
+[100%] Linking CXX executable test_baum_welch_gpu
+cd /user/7/dialloh/gpu_comp_hmm_regime/build/test && /usr/bin/cmake -E cmake_link_script CMakeFiles/test_baum_welch_gpu.dir/link.txt --verbose=1
+/usr/bin/c++  -Wall -Wextra -O3 -march=native -DNDEBUG CMakeFiles/test_baum_welch_gpu.dir/cuda/test_baum_welch_gpu.cu.o -o test_baum_welch_gpu   -L/usr/local/cuda-12.6/targets/x86_64-linux/lib/stubs  -L/usr/local/cuda-12.6/targets/x86_64-linux/lib  -Wl,-rpath,/usr/local/cuda-12.6/targets/x86_64-linux/lib ../src/cuda/libhmm_cuda.a ../src/cpu/libhmm_cpu.a -lm ../src/cuda/kernels/libhmm_kernels.a /usr/local/cuda-12.6/targets/x86_64-linux/lib/libcudart.so /usr/local/cuda-12.6/targets/x86_64-linux/lib/libcublas.so /usr/local/cuda-12.6/targets/x86_64-linux/lib/libcublasLt.so /usr/local/cuda-12.6/targets/x86_64-linux/lib/libculibos.a -lcudadevrt -lcudart_static -lrt -lpthread -ldl 
+make[2]: Leaving directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+[100%] Built target test_baum_welch_gpu
+make[1]: Leaving directory '/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build'
+/usr/bin/cmake -E cmake_progress_start /user/7/dialloh/gpu_comp_hmm_regime/build/CMakeFiles 0
+✓ Build complete
+
+GPU Info:
+name, memory.total [MiB], driver_version
+Quadro RTX 6000, 23040 MiB, 580.65.06
+Quadro RTX 6000, 23040 MiB, 580.65.06
+Quadro RTX 6000, 23040 MiB, 580.65.06
+
+Running all GPU tests...
+
+================================
+Running: test_baum_welch_gpu
+================================
+
+========================================
+TEST BAUM-WELCH GPU vs CPU
+========================================
+
+
+============================================
+Test Baum-Welch: T=100, N=3, K=4
+============================================
+
+[GPU] Baum-Welch Algorithm (5 iterations)...
+  Iter 0: LL=-652.424 (0.438432 ms)
+  Iter 1: LL=-641.084 (0.39952 ms)
+  Iter 2: LL=-638.088 (0.395232 ms)
+  Iter 3: LL=-634.376 (0.392416 ms)
+  Iter 4: LL=-629.012 (0.399104 ms)
+  ✓ Baum-Welch GPU Total: 2.0247 ms
+
+[CPU] Baum-Welch Algorithm (5 iterations)...
+  Iter 0: LL=-1467.68
+  Iter 1: LL=-685.548
+  Iter 2: LL=-677.79
+  Iter 3: LL=-676.624
+  Iter 4: LL=-675.823
+  ✓ Baum-Welch CPU Total: 0.719283 ms
+
+[Validation] Comparing GPU vs CPU...
+  Means Relative Error: 0.492828
+  Transition Matrix Relative Error: 0.151477
+  Final Log-Likelihood (GPU): -629.012
+  Final Log-Likelihood (CPU): -675.823
+  LL Difference: 46.8108
+[31m[ECHEC] Means converged similarly[0m (Ligne 235)
+[31m[ECHEC] Transition matrix converged similarly[0m (Ligne 236)
+[31m[ECHEC] Log-likelihood converged to similar value[0m (Ligne 237)
+
+[Performance Summary]
+  GPU Total: 2.0247 ms
+  CPU Total: 0.719283 ms
+  Speedup: 0.355253x
+
+✅ Test Baum-Welch PASSED
+
+
+============================================
+Test Baum-Welch: T=500, N=4, K=8
+============================================
+
+[GPU] Baum-Welch Algorithm (10 iterations)...
+  Iter 0: LL=-6167.91 (2.07107 ms)
+  Iter 1: LL=-6041.79 (2.05155 ms)
+  Iter 2: LL=-6024.12 (1.98362 ms)
+  Iter 3: LL=-6023.97 (1.98054 ms)
+  Iter 4: LL=-6023.97 (1.98186 ms)
+  Iter 5: LL=-6023.97 (1.97827 ms)
+  Iter 6: LL=-6023.97 (1.98557 ms)
+  Iter 7: LL=-6023.97 (1.98656 ms)
+  Iter 8: LL=-6023.97 (1.98765 ms)
+  Iter 9: LL=-6023.97 (1.97581 ms)
+  ✓ Baum-Welch GPU Total: 19.9825 ms
+
+[CPU] Baum-Welch Algorithm (10 iterations)...
+  Iter 0: LL=-15194.4
+  Iter 1: LL=-6450.69
+  Iter 2: LL=-6409.4
+  Iter 3: LL=-6389.98
+  Iter 4: LL=-nan
+  Iter 5: LL=-nan
+  Iter 6: LL=-nan
+  Iter 7: LL=-nan
+  Iter 8: LL=-nan
+  Iter 9: LL=-nan
+  ✓ Baum-Welch CPU Total: 9.78521 ms
+
+[Validation] Comparing GPU vs CPU...
+  Means Relative Error: 1
+  Transition Matrix Relative Error: 0.722609
+  Final Log-Likelihood (GPU): -6023.97
+  Final Log-Likelihood (CPU): -nan
+  LL Difference: nan
+[31m[ECHEC] Means converged similarly[0m (Ligne 235)
+[31m[ECHEC] Transition matrix converged similarly[0m (Ligne 236)
+[31m[ECHEC] Log-likelihood converged to similar value[0m (Ligne 237)
+
+[Performance Summary]
+  GPU Total: 19.9825 ms
+  CPU Total: 9.78521 ms
+  Speedup: 0.489689x
+
+✅ Test Baum-Welch PASSED
+
+
+============================================
+Test Baum-Welch: T=1000, N=4, K=12
+============================================
+
+[GPU] Baum-Welch Algorithm (5 iterations)...
+  Iter 0: LL=-64402.9 (0.548064 ms)
+  Iter 1: LL=-64402.9 (0.552992 ms)
+  Iter 2: LL=-64402.9 (0.553248 ms)
+  Iter 3: LL=-64402.9 (0.55712 ms)
+  Iter 4: LL=-64402.9 (0.55296 ms)
+  ✓ Baum-Welch GPU Total: 2.76438 ms
+
+[CPU] Baum-Welch Algorithm (5 iterations)...
+  Iter 0: LL=-42176.7
+  Iter 1: LL=-nan
+  Iter 2: LL=-nan
+  Iter 3: LL=-nan
+  Iter 4: LL=-nan
+  ✓ Baum-Welch CPU Total: 13.12 ms
+
+[Validation] Comparing GPU vs CPU...
+  Means Relative Error: 1
+  Transition Matrix Relative Error: 1
+  Final Log-Likelihood (GPU): -64402.9
+  Final Log-Likelihood (CPU): -nan
+  LL Difference: nan
+[31m[ECHEC] Means converged similarly[0m (Ligne 235)
+[31m[ECHEC] Transition matrix converged similarly[0m (Ligne 236)
+[31m[ECHEC] Log-likelihood converged to similar value[0m (Ligne 237)
+
+[Performance Summary]
+  GPU Total: 2.76438 ms
+  CPU Total: 13.12 ms
+  Speedup: 4.7461x
+
+✅ Test Baum-Welch PASSED
+
+
+[31m>>> 9 TEST(S) ECHOUE(S) <<<[0m
+
+================================
+Running: test_forward_backward_gpu
+================================
+
+========================================
+TEST FORWARD-BACKWARD GPU vs CPU
+========================================
+
+
+============================================
+Test Forward-Backward: T=100, N=3, K=4
+============================================
+
+[GPU] Forward Algorithm...
+  ✓ Forward GPU: 0.138525 ms (avg)
+[GPU] Backward Algorithm...
+  ✓ Backward GPU: 0.13769 ms (avg)
+
+[CPU] Forward-Backward Algorithm...
+  ✓ Forward-Backward CPU: 0.184853 ms
+
+[Validation] Comparing GPU vs CPU...
+  Alpha Relative Error: 1.28578e-07
+  Beta Relative Error: 0.141973
+[32m[REUSSI] Alpha GPU vs CPU match[0m
+[31m[ECHEC] Beta GPU vs CPU match[0m (Ligne 168)
+
+[Performance Summary]
+  GPU Total: 0.276214 ms
+  CPU Total: 0.184853 ms
+  Speedup: 0.669237x
+
+✅ Test Forward-Backward PASSED
+
+
+============================================
+Test Forward-Backward: T=500, N=4, K=8
+============================================
+
+[GPU] Forward Algorithm...
+  ✓ Forward GPU: 0.13705 ms (avg)
+[GPU] Backward Algorithm...
+  ✓ Backward GPU: 0.134925 ms (avg)
+
+[CPU] Forward-Backward Algorithm...
+  ✓ Forward-Backward CPU: 1.29833 ms
+
+[Validation] Comparing GPU vs CPU...
+  Alpha Relative Error: 5.54526e-07
+  Beta Relative Error: 0.0244699
+[32m[REUSSI] Alpha GPU vs CPU match[0m
+[31m[ECHEC] Beta GPU vs CPU match[0m (Ligne 168)
+
+[Performance Summary]
+  GPU Total: 0.271974 ms
+  CPU Total: 1.29833 ms
+  Speedup: 4.77373x
+
+✅ Test Forward-Backward PASSED
+
+
+============================================
+Test Forward-Backward: T=1000, N=5, K=16
+============================================
+
+[GPU] Forward Algorithm...
+  ✓ Forward GPU: 0.194653 ms (avg)
+[GPU] Backward Algorithm...
+  ✓ Backward GPU: 0.17023 ms (avg)
+
+[CPU] Forward-Backward Algorithm...
+  ✓ Forward-Backward CPU: 4.21219 ms
+
+[Validation] Comparing GPU vs CPU...
+  Alpha Relative Error: 9.24761e-07
+  Beta Relative Error: 0.0029684
+[32m[REUSSI] Alpha GPU vs CPU match[0m
+[31m[ECHEC] Beta GPU vs CPU match[0m (Ligne 168)
+
+[Performance Summary]
+  GPU Total: 0.364883 ms
+  CPU Total: 4.21219 ms
+  Speedup: 11.5439x
+
+✅ Test Forward-Backward PASSED
+
+
+[31m>>> 3 TEST(S) ECHOUE(S) <<<[0m
+
+================================
+Running: test_viterbi_gpu
+================================
+
+========================================
+TEST VITERBI GPU vs CPU
+========================================
+
+
+============================================
+Test Viterbi: T=100, N=3, K=4
+============================================
+
+[GPU] Viterbi Algorithm...
+  ✓ Viterbi GPU: 0.117398 ms (avg)
+
+[CPU] Viterbi Algorithm...
+  ✓ Viterbi CPU: 0.041089 ms
+  Log-Probability (CPU): -637.025
+
+[Validation] Comparing GPU vs CPU...
+  Path Accuracy: 100%
+[32m[REUSSI] Viterbi paths match (>95%)[0m
+  Accuracy vs True States (GPU): 100%
+  Accuracy vs True States (CPU): 100%
+
+[Performance Summary]
+  GPU Total: 0.117398 ms
+  CPU Total: 0.041089 ms
+  Speedup: 0.349996x
+
+✅ Test Viterbi PASSED
+
+
+============================================
+Test Viterbi: T=500, N=4, K=8
+============================================
+
+[GPU] Viterbi Algorithm...
+  ✓ Viterbi GPU: 0.259526 ms (avg)
+
+[CPU] Viterbi Algorithm...
+  ✓ Viterbi CPU: 0.675992 ms
+  Log-Probability (CPU): -5928.63
+
+[Validation] Comparing GPU vs CPU...
+  Path Accuracy: 100%
+[32m[REUSSI] Viterbi paths match (>95%)[0m
+  Accuracy vs True States (GPU): 100%
+  Accuracy vs True States (CPU): 100%
+
+[Performance Summary]
+  GPU Total: 0.259526 ms
+  CPU Total: 0.675992 ms
+  Speedup: 2.60471x
+
+✅ Test Viterbi PASSED
+
+
+============================================
+Test Viterbi: T=1000, N=5, K=16
+============================================
+
+[GPU] Viterbi Algorithm...
+  ✓ Viterbi GPU: 0.529248 ms (avg)
+
+[CPU] Viterbi Algorithm...
+  ✓ Viterbi CPU: 3.69983 ms
+  Log-Probability (CPU): -22666.8
+
+[Validation] Comparing GPU vs CPU...
+  Path Accuracy: 100%
+[32m[REUSSI] Viterbi paths match (>95%)[0m
+  Accuracy vs True States (GPU): 100%
+  Accuracy vs True States (CPU): 100%
+
+[Performance Summary]
+  GPU Total: 0.529248 ms
+  CPU Total: 3.69983 ms
+  Speedup: 6.99073x
+
+✅ Test Viterbi PASSED
+
+
+[32m>>> TOUS LES TESTS SONT PASSES ! <<<[0m
+
+==========================================
+Job completed at Tue Jan  6 16:47:49 CET 2026
+==========================================
