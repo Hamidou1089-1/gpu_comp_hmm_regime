@@ -22,3 +22,4 @@ data/*.csv
 data/*.txt
 !data/README.md
 
+scripts/FlameGraph/
