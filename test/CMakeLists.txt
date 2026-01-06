@@ -95,6 +95,22 @@ if(BUILD_TESTS_CUDA AND BUILD_CUDA)
     )
     add_test(NAME test_baum_welch_gpu COMMAND test_baum_welch_gpu)
     
+    # Test 1: Forward-Backward GPU
+    add_executable(test_real_data_gpu cuda/test_real_data.cu)
+    
+    # On lui donne accès aux libs CPU et GPU
+    target_link_libraries(test_real_data_gpu PRIVATE hmm_cpu hmm_cuda)
+    
+    # On lui donne les chemins des includes
+    target_include_directories(test_real_data_gpu PRIVATE 
+        ${PROJECT_SOURCE_DIR}/include/cuda
+        ${PROJECT_SOURCE_DIR}/include/cpu
+        ${PROJECT_SOURCE_DIR}/include/cuda/kernels
+        ${PROJECT_SOURCE_DIR}/test/common
+    )
+    
+    # On l'enregistre pour CTest
+    add_test(NAME test_real_data_gpu COMMAND test_real_data_gpu)
 
     # Benchmark CPU vs GPU
     if(BUILD_BENCHMARKS)
@@ -110,7 +126,7 @@ if(BUILD_TESTS_CUDA AND BUILD_CUDA)
             ${PROJECT_SOURCE_DIR}/test/common
         )
         add_test(NAME benchmark_gpu_vs_cpu COMMAND benchmark_gpu_vs_cpu)
-        
+
         message(STATUS "  - benchmark_gpu_vs_cpu")
     endif()
     

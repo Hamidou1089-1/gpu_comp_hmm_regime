@@ -72,6 +72,8 @@ fi
 
 cd build/test
 
+
+
 # Vérifier le GPU
 echo ""
 echo "GPU Info:"

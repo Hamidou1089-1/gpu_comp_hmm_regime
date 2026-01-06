@@ -1,0 +1,6 @@
+CMake Error at test/CMakeLists.txt:100 (target_link_libraries):
+  Cannot specify link libraries for target "test_real_data_gpu" which is not
+  built by this project.
+
+
+make: *** No targets specified and no makefile found.  Stop.

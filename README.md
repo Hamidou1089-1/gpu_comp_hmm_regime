@@ -14,13 +14,6 @@ This project implements GPU-accelerated Hidden Markov Models based on **Hassan &
 - Multivariate Gaussian emission models
 - CPU and CUDA dual implementation
 
-## Status
-awDASEIN2001@
-
-**Current:** ✅ CPU implementation complete with full test suite
-**In Progress:** 🔄 CUDA kernel development and optimization
-**Next:** 📋 Performance benchmarking and cluster deployment
-
 ## Project Structure
 
 ```
@@ -46,4 +39,4 @@ Academic Project - GPU Computing
 
 ---
 
-*Last Updated: December 2025*
+*Last Updated: Janvier 2026*

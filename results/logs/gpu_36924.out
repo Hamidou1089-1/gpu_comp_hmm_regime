@@ -1,0 +1,309 @@
+==========================================
+GPU Job - HMM Regime Detection
+Job ID: 36924
+Node: turing-2
+Date: Tue Jan  6 22:20:24 CET 2026
+==========================================
+
+WARNING: golden_data not found in project root!
+
+GPU Info:
+name, memory.total [MiB], driver_version
+Quadro RTX 6000, 23040 MiB, 580.65.06
+Quadro RTX 6000, 23040 MiB, 580.65.06
+Quadro RTX 6000, 23040 MiB, 580.65.06
+
+Running all GPU tests...
+
+================================
+Running: test_baum_welch_gpu
+================================
+
+========================================
+TEST BAUM-WELCH GPU vs CPU
+========================================
+
+
+============================================
+Test Baum-Welch: T=500, N=3, K=4
+============================================
+
+[GPU] Baum-Welch Algorithm...
+  ✓ Total Time: 19.614 ms
+[CPU] Baum-Welch Algorithm...
+Final LL GPU: -328.977
+Final LL CPU: -328.149
+Speedup: 0.228515x
+[32m[REUSSI] Convergence Similaire[0m
+
+============================================
+Test Baum-Welch: T=1000, N=4, K=4
+============================================
+
+[GPU] Baum-Welch Algorithm...
+  ✓ Total Time: 4.05722 ms
+[CPU] Baum-Welch Algorithm...
+Final LL GPU: -419.66
+Final LL CPU: -417.403
+Speedup: 3.4546x
+[32m[REUSSI] Convergence Similaire[0m
+
+============================================
+Test Baum-Welch: T=5000, N=4, K=4
+============================================
+
+[GPU] Baum-Welch Algorithm...
+  ✓ Total Time: 8.68342 ms
+[CPU] Baum-Welch Algorithm...
+Final LL GPU: -2540.58
+Final LL CPU: -2536.83
+Speedup: 7.76232x
+[32m[REUSSI] Convergence Similaire[0m
+
+============================================
+Test Baum-Welch: T=10000, N=4, K=4
+============================================
+
+[GPU] Baum-Welch Algorithm...
+  ✓ Total Time: 14.2312 ms
+[CPU] Baum-Welch Algorithm...
+Final LL GPU: -1.99981e+09
+Final LL CPU: -986.323
+Speedup: 9.59893x
+[31m[ATTENTION] Divergence numérique (Log-Space vs Linear)[0m
+
+[32m>>> TOUS LES TESTS SONT PASSES ! <<<[0m
+
+================================
+Running: test_forward_backward_gpu
+================================
+
+========================================
+TEST FORWARD-BACKWARD GPU vs CPU
+========================================
+
+============================================
+Test Forward-Backward: T=500, N=3, K=4
+============================================
+
+[GPU] Forward Algorithm...
+  ✓ Forward GPU: 0.108074 ms (avg)
+[GPU] Backward Algorithm...
+✓ Backward GPU: 0.109194 ms (avg)
+[CPU] Forward-Backward Algorithm...
+  ✓ Forward-Backward CPU: 0.307946 ms
+[Validation] Comparing GPU vs CPU...
+Alpha Relative Error: 1.00508e-06
+Beta Relative Error: 0.00277592
+[32m[REUSSI] Alpha GPU vs CPU match[0m
+[31m[ECHEC] Beta GPU vs CPU match[0m (Ligne 168)
+
+[Performance Summary]
+  GPU Total: 0.217267 ms
+  CPU Total: 0.307946 ms
+  Speedup: 1.41736x
+
+✅ Test Forward-Backward PASSED
+
+============================================
+Test Forward-Backward: T=1000, N=4, K=8
+============================================
+
+[GPU] Forward Algorithm...
+  ✓ Forward GPU: 0.148042 ms (avg)
+[GPU] Backward Algorithm...
+✓ Backward GPU: 0.150874 ms (avg)
+[CPU] Forward-Backward Algorithm...
+  ✓ Forward-Backward CPU: 1.5718 ms
+[Validation] Comparing GPU vs CPU...
+Alpha Relative Error: 3.04945e-07
+Beta Relative Error: 0.040256
+[32m[REUSSI] Alpha GPU vs CPU match[0m
+[31m[ECHEC] Beta GPU vs CPU match[0m (Ligne 168)
+
+[Performance Summary]
+  GPU Total: 0.298915 ms
+  CPU Total: 1.5718 ms
+  Speedup: 5.25836x
+
+✅ Test Forward-Backward PASSED
+
+============================================
+Test Forward-Backward: T=5000, N=5, K=10
+============================================
+
+[GPU] Forward Algorithm...
+  ✓ Forward GPU: 0.360934 ms (avg)
+[GPU] Backward Algorithm...
+✓ Backward GPU: 0.356301 ms (avg)
+[CPU] Forward-Backward Algorithm...
+  ✓ Forward-Backward CPU: 13.0837 ms
+[Validation] Comparing GPU vs CPU...
+Alpha Relative Error: 7.0692e-07
+Beta Relative Error: 0.000883494
+[32m[REUSSI] Alpha GPU vs CPU match[0m
+[32m[REUSSI] Beta GPU vs CPU match[0m
+
+[Performance Summary]
+  GPU Total: 0.717235 ms
+  CPU Total: 13.0837 ms
+  Speedup: 18.2419x
+
+✅ Test Forward-Backward PASSED
+
+============================================
+Test Forward-Backward: T=10000, N=5, K=10
+============================================
+
+[GPU] Forward Algorithm...
+  ✓ Forward GPU: 0.730394 ms (avg)
+[GPU] Backward Algorithm...
+✓ Backward GPU: 0.724189 ms (avg)
+[CPU] Forward-Backward Algorithm...
+  ✓ Forward-Backward CPU: 26.0321 ms
+[Validation] Comparing GPU vs CPU...
+Alpha Relative Error: 2.02959e-06
+Beta Relative Error: 0.00731948
+[32m[REUSSI] Alpha GPU vs CPU match[0m
+[31m[ECHEC] Beta GPU vs CPU match[0m (Ligne 168)
+
+[Performance Summary]
+  GPU Total: 1.45458 ms
+  CPU Total: 26.0321 ms
+  Speedup: 17.8966x
+
+✅ Test Forward-Backward PASSED
+
+
+[31m>>> 3 TEST(S) ECHOUE(S) <<<[0m
+
+================================
+Running: test_real_data_gpu
+================================
+Chargement Real Data: T=2000 N=3 K=4
+Starting training for 20 iterations...
+Iter   0 | LL:  -11655.8125 | Delta: inf
+Iter  10 | LL:   -9032.9805 | Delta: 0.6504
+Iter  19 | LL:   -8413.7705 | Delta: 393.7090
+
+------------------------------------------------
+Total Time: 25.3221 ms
+Avg Time/Iter: 1.2661 ms
+Final Log Likelihood: -8413.7705
+------------------------------------------------
+Learned Means (State 0, first 4 dims): [ -1.0465 -1.0608 0.7847 0.7476 ]
+
+================================
+Running: test_viterbi_gpu
+================================
+
+========================================
+TEST VITERBI GPU vs CPU
+========================================
+
+
+============================================
+Test Viterbi: T=500, N=3, K=4
+============================================
+
+[GPU] Viterbi Algorithm...
+  ✓ Viterbi GPU: 0.217405 ms (avg)
+
+[CPU] Viterbi Algorithm...
+  ✓ Viterbi CPU: 0.176543 ms
+  Log-Probability (CPU): -3197.2
+
+[Validation] Comparing GPU vs CPU...
+  Path Accuracy: 100%
+[32m[REUSSI] Viterbi paths match (>95%)[0m
+  Accuracy vs True States (GPU): 100%
+  Accuracy vs True States (CPU): 100%
+
+[Performance Summary]
+  GPU Total: 0.217405 ms
+  CPU Total: 0.176543 ms
+  Speedup: 0.812047x
+
+✅ Test Viterbi PASSED
+
+
+============================================
+Test Viterbi: T=1000, N=4, K=8
+============================================
+
+[GPU] Viterbi Algorithm...
+  ✓ Viterbi GPU: 0.401936 ms (avg)
+
+[CPU] Viterbi Algorithm...
+  ✓ Viterbi CPU: 1.19858 ms
+  Log-Probability (CPU): -12249.9
+
+[Validation] Comparing GPU vs CPU...
+  Path Accuracy: 100%
+[32m[REUSSI] Viterbi paths match (>95%)[0m
+  Accuracy vs True States (GPU): 100%
+  Accuracy vs True States (CPU): 100%
+
+[Performance Summary]
+  GPU Total: 0.401936 ms
+  CPU Total: 1.19858 ms
+  Speedup: 2.98202x
+
+✅ Test Viterbi PASSED
+
+
+============================================
+Test Viterbi: T=5000, N=5, K=10
+============================================
+
+[GPU] Viterbi Algorithm...
+  ✓ Viterbi GPU: 2.06956 ms (avg)
+
+[CPU] Viterbi Algorithm...
+  ✓ Viterbi CPU: 10.44 ms
+  Log-Probability (CPU): -76468.9
+
+[Validation] Comparing GPU vs CPU...
+  Path Accuracy: 100%
+[32m[REUSSI] Viterbi paths match (>95%)[0m
+  Accuracy vs True States (GPU): 100%
+  Accuracy vs True States (CPU): 100%
+
+[Performance Summary]
+  GPU Total: 2.06956 ms
+  CPU Total: 10.44 ms
+  Speedup: 5.04456x
+
+✅ Test Viterbi PASSED
+
+
+============================================
+Test Viterbi: T=10000, N=5, K=10
+============================================
+
+[GPU] Viterbi Algorithm...
+  ✓ Viterbi GPU: 4.29165 ms (avg)
+
+[CPU] Viterbi Algorithm...
+  ✓ Viterbi CPU: 20.9578 ms
+  Log-Probability (CPU): -152938
+
+[Validation] Comparing GPU vs CPU...
+  Path Accuracy: 100%
+[32m[REUSSI] Viterbi paths match (>95%)[0m
+  Accuracy vs True States (GPU): 100%
+  Accuracy vs True States (CPU): 100%
+
+[Performance Summary]
+  GPU Total: 4.29165 ms
+  CPU Total: 20.9578 ms
+  Speedup: 4.8834x
+
+✅ Test Viterbi PASSED
+
+
+[32m>>> TOUS LES TESTS SONT PASSES ! <<<[0m
+
+==========================================
+Job completed at Tue Jan  6 22:20:26 CET 2026
+==========================================
