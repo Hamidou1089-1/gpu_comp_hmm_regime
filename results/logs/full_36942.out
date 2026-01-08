@@ -1,0 +1,398 @@
+╔══════════════════════════════════════════════════════════════╗
+║    HMM GPU PROFILING                                         ║
+║    Job ID: 36942
+║    Node: turing-2
+║    Mode: full
+║    Tests: all
+╚══════════════════════════════════════════════════════════════╝
+
+Date: Wed Jan  7 22:54:17 CET 2026
+
+═══ GPU Information ═══
+name, memory.total [MiB], driver_version, compute_cap
+Quadro RTX 6000, 23040 MiB, 580.65.06, 7.5
+Quadro RTX 6000, 23040 MiB, 580.65.06, 7.5
+Quadro RTX 6000, 23040 MiB, 580.65.06, 7.5
+
+═══ Building Project ═══
+-- CPU tests enabled
+-- CUDA tests enabled
+--   - test_forward_backward_gpu
+--   - test_viterbi_gpu
+-- Profiling enabled - perf/gprof compatible build
+-- 
+-- ========================================
+-- GPU HMM Regime Detection - Configuration
+-- ========================================
+-- Build type      : Release
+-- C++ compiler    : /usr/bin/c++
+-- CUDA support    : ON
+-- Tests           : ON
+-- Benchmarks      : OFF
+-- Profiling       : ON
+-- ========================================
+-- 
+-- Configuring done (3.4s)
+-- Generating done (0.3s)
+-- Build files have been written to: /user/7/dialloh/gpu_comp_hmm_regime/build
+[ 85%] Built target hmm_cuda
+[ 92%] Building CUDA object test/CMakeFiles/test_profile_gpu_robust.dir/cuda/test_profile_gpu_robust.cu.o
+/user/7/dialloh/gpu_comp_hmm_regime/test/cuda/test_profile_gpu_robust.cu(504): warning #177-D: variable "bw_runs" was declared but never referenced
+          int bw_runs = (data.T > 20000) ? 100 : 120;
+              ^
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+[100%] Linking CXX executable test_profile_gpu_robust
+[100%] Built target test_profile_gpu_robust
+✓ Build complete
+
+═══ Phase 1: Timing Benchmark ═══
+
+╔══════════════════════════════════════════════════════════╗
+║ GPU: Quadro RTX 6000                                     ║
+╠══════════════════════════════════════════════════════════╣
+║ Compute Capability: 7.5                                     ║
+║ Total Memory: 22501  MB                                   ║
+║ SM Count: 72                                              ║
+║ Max Threads/Block: 1024                                   ║
+║ Warp Size: 32                                              ║
+╚══════════════════════════════════════════════════════════╝
+
+╔══════════════════════════════════════════════════════════════╗
+║         GPU PROFILING - HMM ALGORITHMS (Hassan et al.)       ║
+╠══════════════════════════════════════════════════════════════╣
+║  Data dir: data/bench                                     ║
+║  Output:   results/benchmarks/gpu_benchmark               ║
+║  Mode:     all                                            ║
+╚══════════════════════════════════════════════════════════════╝
+
+Found 13 datasets:
+  - scaling_T_100
+  - scaling_T_102400
+  - scaling_T_12800
+  - scaling_T_1600
+  - scaling_T_200
+  - scaling_T_204800
+  - scaling_T_25600
+  - scaling_T_3200
+  - scaling_T_400
+  - scaling_T_51200
+  - scaling_T_6400
+  - scaling_T_800
+  - validation_convergence
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Profiling: scaling_T_100 (T=100, N=3, K=4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [Forward] 0.0773717 ms (±0.00369835) | 1.43592 GB/s
+  [Backward] 0.0771816 ms (±0.00321833) | 1.43946 GB/s
+  [Viterbi] 0.0726379 ms (±0.00299662) | 1.53501 GB/s
+  [Baum-Welch 10 iter] 23.2153 ms (±0.127245) | LL=-510.658
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Profiling: scaling_T_102400 (T=102400, N=3, K=4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [Forward] 0.470434 ms (±0.0843777) | 241.181 GB/s
+  [Backward] 0.428726 ms (±0.00297768) | 264.644 GB/s
+  [Viterbi] 0.429233 ms (±0.0027194) | 265.285 GB/s
+  [Baum-Welch 10 iter] 4.66051 ms (±0.197492) | LL=1.09861
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Profiling: scaling_T_12800 (T=12800, N=3, K=4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [Forward] 0.448231 ms (±0.00428281) | 31.6415 GB/s
+  [Backward] 0.440406 ms (±0.00476998) | 32.2037 GB/s
+  [Viterbi] 0.386761 ms (±0.00292025) | 36.8029 GB/s
+  [Baum-Welch 10 iter] 26.3104 ms (±0.133648) | LL=-61243.6
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Profiling: scaling_T_1600 (T=1600, N=3, K=4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [Forward] 0.134601 ms (±0.00266753) | 13.173 GB/s
+  [Backward] 0.138514 ms (±0.0490479) | 12.8008 GB/s
+  [Viterbi] 0.123708 ms (±0.00250281) | 14.3847 GB/s
+  [Baum-Welch 10 iter] 8.27379 ms (±0.0062087) | LL=-7768.19
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Profiling: scaling_T_200 (T=200, N=3, K=4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [Forward] 0.0698712 ms (±0.00365761) | 3.17584 GB/s
+  [Backward] 0.0686398 ms (±0.00211938) | 3.23282 GB/s
+  [Viterbi] 0.0676264 ms (±0.00215833) | 3.29309 GB/s
+  [Baum-Welch 10 iter] 3.92983 ms (±0.0570465) | LL=-811.796
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Profiling: scaling_T_204800 (T=204800, N=3, K=4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [Forward] 0.534119 ms (±0.102978) | 424.847 GB/s
+  [Backward] 0.542386 ms (±0.144496) | 418.372 GB/s
+  [Viterbi] 0.505112 ms (±0.0281281) | 450.866 GB/s
+  [Baum-Welch 10 iter] 6.29836 ms (±0.0242132) | LL=1.09861
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Profiling: scaling_T_25600 (T=25600, N=3, K=4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [Forward] 0.917834 ms (±0.0329552) | 30.9044 GB/s
+  [Backward] 0.905075 ms (±0.00391916) | 31.3401 GB/s
+  [Viterbi] 0.826951 ms (±0.0051791) | 34.4246 GB/s
+  [Baum-Welch 10 iter] 81.9139 ms (±0.147153) | LL=-131035
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Profiling: scaling_T_3200 (T=3200, N=3, K=4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [Forward] 0.178035 ms (±0.00328522) | 19.9168 GB/s
+  [Backward] 0.176352 ms (±0.00239799) | 20.1069 GB/s
+  [Viterbi] 0.157486 ms (±0.002923) | 22.5969 GB/s
+  [Baum-Welch 10 iter] 7.11823 ms (±0.0263296) | LL=-16015.8
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Profiling: scaling_T_400 (T=400, N=3, K=4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [Forward] 0.0884271 ms (±0.00388476) | 5.01543 GB/s
+  [Backward] 0.0873192 ms (±0.00262405) | 5.07906 GB/s
+  [Viterbi] 0.0841434 ms (±0.001775) | 5.28978 GB/s
+  [Baum-Welch 10 iter] 6.24401 ms (±0.0657968) | LL=-1663.22
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Profiling: scaling_T_51200 (T=51200, N=3, K=4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [Forward] 1.70971 ms (±0.0255617) | 33.1811 GB/s
+  [Backward] 1.70151 ms (±0.0037128) | 33.3409 GB/s
+  [Viterbi] 1.57463 ms (±0.00578213) | 36.1576 GB/s
+  [Baum-Welch 10 iter] 93.2639 ms (±0.0708314) | LL=-247857
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Profiling: scaling_T_6400 (T=6400, N=3, K=4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [Forward] 0.269874 ms (±0.00446416) | 26.2771 GB/s
+  [Backward] 0.267929 ms (±0.00271873) | 26.4679 GB/s
+  [Viterbi] 0.235927 ms (±0.0155441) | 30.1666 GB/s
+  [Baum-Welch 10 iter] 9.52984 ms (±0.0335776) | LL=-1.27988e+09
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Profiling: scaling_T_800 (T=800, N=3, K=4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [Forward] 0.134911 ms (±0.0254377) | 6.57248 GB/s
+  [Backward] 0.100705 ms (±0.00331494) | 8.80489 GB/s
+  [Viterbi] 0.0942376 ms (±0.00170775) | 9.44315 GB/s
+  [Baum-Welch 10 iter] 8.38534 ms (±0.0541495) | LL=-4112.86
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Profiling: validation_convergence (T=2000, N=3, K=4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [Forward] 0.146115 ms (±0.0040478) | 15.1682 GB/s
+  [Backward] 0.144115 ms (±0.00252815) | 15.3787 GB/s
+  [Viterbi] 0.131131 ms (±0.00277944) | 16.9624 GB/s
+  [Baum-Welch 10 iter] 4.36175 ms (±0.0258443) | LL=-3.99961e+08
+  [Baum-Welch Convergence] 3.96899 ms (11 iters, LL=-3.99961e+08)
+
+═══════════════════════════════════════════════════════════════
+                       EXPORT RESULTS                          
+═══════════════════════════════════════════════════════════════
+✓ GPU results saved to results/benchmarks/gpu_benchmark_results.csv
+✓ GPU results saved to results/benchmarks/gpu_benchmark_results.json
+
+╔══════════════════════════════════════════════════════════════╗
+║                    PROFILING COMPLETE                        ║
+╠══════════════════════════════════════════════════════════════╣
+║  Total tests: 53                                           ║
+║  CSV output:  results/benchmarks/gpu_benchmark_results.csv ║
+║  JSON output: results/benchmarks/gpu_benchmark_results.json║
+╚══════════════════════════════════════════════════════════════╝
+
+Next steps:
+  Analyze with Python:
+    python analyze_benchmark_results.py --gpu-csv results/benchmarks/gpu_benchmark_results.csv
+
+
+═══ Phase 1 Results ═══
+dataset,algo,T,N,K,time_ms,time_std_ms,time_min_ms,time_max_ms,log_likelihood,iterations,bandwidth_GBs,occupancy_pct,gpu_mem_MB,device
+scaling_T_100,forward,100,3,4,0.0774,0.0037,0.0740,0.0962,-589.553650,1,1.44,0.0,168.88,"Quadro RTX 6000"
+scaling_T_100,backward,100,3,4,0.0772,0.0032,0.0740,0.0931,0.000000,1,1.44,0.0,168.88,"Quadro RTX 6000"
+scaling_T_100,viterbi,100,3,4,0.0726,0.0030,0.0697,0.0985,-633.994385,1,1.54,0.0,168.88,"Quadro RTX 6000"
+scaling_T_100,baum_welch_100,100,3,4,23.2153,0.1272,23.0885,23.4106,-510.657532,100,1.02,0.0,168.88,"Quadro RTX 6000"
+scaling_T_102400,forward,102400,3,4,0.4704,0.0844,0.4239,0.8111,1.098612,1,241.18,0.0,176.88,"Quadro RTX 6000"
+scaling_T_102400,backward,102400,3,4,0.4287,0.0030,0.4239,0.4372,0.000000,1,264.64,0.0,176.88,"Quadro RTX 6000"
+scaling_T_102400,viterbi,102400,3,4,0.4292,0.0027,0.4239,0.4381,1.098612,1,265.29,0.0,176.88,"Quadro RTX 6000"
+scaling_T_102400,baum_welch_100,102400,3,4,4.6605,0.1975,4.4673,4.8660,1.098612,100,5185.37,0.0,176.88,"Quadro RTX 6000"
+scaling_T_12800,forward,12800,3,4,0.4482,0.0043,0.4403,0.4609,-79114.070312,1,31.64,0.0,168.88,"Quadro RTX 6000"
+scaling_T_12800,backward,12800,3,4,0.4404,0.0048,0.4327,0.4521,0.000000,1,32.20,0.0,168.88,"Quadro RTX 6000"
+scaling_T_12800,viterbi,12800,3,4,0.3868,0.0029,0.3816,0.4012,-86136.664062,1,36.80,0.0,168.88,"Quadro RTX 6000"
+scaling_T_12800,baum_welch_100,12800,3,4,26.3104,0.1336,26.0799,26.4272,-61243.609375,100,114.82,0.0,168.88,"Quadro RTX 6000"
+scaling_T_1600,forward,1600,3,4,0.1346,0.0027,0.1314,0.1495,-9395.948242,1,13.17,0.0,168.88,"Quadro RTX 6000"
+scaling_T_1600,backward,1600,3,4,0.1385,0.0490,0.1317,0.7033,0.000000,1,12.80,0.0,168.88,"Quadro RTX 6000"
+scaling_T_1600,viterbi,1600,3,4,0.1237,0.0025,0.1208,0.1310,-10471.633789,1,14.38,0.0,168.88,"Quadro RTX 6000"
+scaling_T_1600,baum_welch_100,1600,3,4,8.2738,0.0062,8.2661,8.2801,-7768.187988,100,45.65,0.0,168.88,"Quadro RTX 6000"
+scaling_T_200,forward,200,3,4,0.0699,0.0037,0.0660,0.0882,-1170.410400,1,3.18,0.0,168.88,"Quadro RTX 6000"
+scaling_T_200,backward,200,3,4,0.0686,0.0021,0.0665,0.0846,0.000000,1,3.23,0.0,168.88,"Quadro RTX 6000"
+scaling_T_200,viterbi,200,3,4,0.0676,0.0022,0.0655,0.0749,-1302.568848,1,3.29,0.0,168.88,"Quadro RTX 6000"
+
+═══ Phase 2: Nsight Compute (quick mode) ═══
+==PROF== Connected to process 74939 (/user/7/.base/dialloh/home/gpu_comp_hmm_regime/build/test/test_profile_gpu_robust)
+
+╔══════════════════════════════════════════════════════════╗
+║ GPU: Quadro RTX 6000                                     ║
+╠══════════════════════════════════════════════════════════╣
+║ Compute Capability: 7.5                                     ║
+║ Total Memory: 22501  MB                                   ║
+║ SM Count: 72                                              ║
+║ Max Threads/Block: 1024                                   ║
+║ Warp Size: 32                                              ║
+╚══════════════════════════════════════════════════════════╝
+
+╔══════════════════════════════════════════════════════════════╗
+║         GPU PROFILING - HMM ALGORITHMS (Hassan et al.)       ║
+╠══════════════════════════════════════════════════════════════╣
+║  Data dir: data/bench                                     ║
+║  Output:   results/benchmarks/gpu_nsight                  ║
+║  Mode:     quick                                          ║
+╚══════════════════════════════════════════════════════════════╝
+
+Found 13 datasets:
+  - scaling_T_100
+  - scaling_T_102400
+  - scaling_T_12800
+  - scaling_T_1600
+  - scaling_T_200
+  - scaling_T_204800
+  - scaling_T_25600
+  - scaling_T_3200
+  - scaling_T_400
+  - scaling_T_51200
+  - scaling_T_6400
+  - scaling_T_800
+  - validation_convergence
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Profiling: scaling_T_100 (T=100, N=3, K=4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [Forward] ==ERROR== ERR_NVGPUCTRPERM - The user does not have permission to access NVIDIA GPU Performance Counters on the target device 0. For instructions on enabling permissions and to get more information see https://developer.nvidia.com/ERR_NVGPUCTRPERM
+1.98351 ms (±0.23301) | 0.0560119 GB/s
+  [Backward] 1.92346 ms (±0.103195) | 0.0577605 GB/s
+  [Viterbi] 2.00949 ms (±0.274021) | 0.0554866 GB/s
+  [Baum-Welch 10 iter] 528.716 ms (±14.0188) | LL=-510.658
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Profiling: scaling_T_102400 (T=102400, N=3, K=4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [Forward] 0.535987 ms (±0.00498751) | 211.683 GB/s
+  [Backward] 0.533775 ms (±0.00413028) | 212.561 GB/s
+  [Viterbi] 0.533343 ms (±0.00370839) | 213.501 GB/s
+  [Baum-Welch 10 iter] 8.4732 ms (±0.123764) | LL=1.09861
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Profiling: scaling_T_12800 (T=12800, N=3, K=4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [Forward] 3.23717 ms (±0.213004) | 4.3812 GB/s
+  [Backward] 3.25723 ms (±0.155481) | 4.35422 GB/s
+  [Viterbi] 3.32169 ms (±0.107612) | 4.28514 GB/s
+  [Baum-Welch 10 iter] 179.975 ms (±8.61592) | LL=-61243.6
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Profiling: scaling_T_1600 (T=1600, N=3, K=4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [Forward] 2.70646 ms (±0.114935) | 0.655135 GB/s
+  [Backward] 2.81243 ms (±0.289488) | 0.630452 GB/s
+  [Viterbi] 2.72925 ms (±0.103859) | 0.65201 GB/s
+  [Baum-Welch 10 iter] 168.808 ms (±7.26846) | LL=-7768.19
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Profiling: scaling_T_200 (T=200, N=3, K=4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [Forward] 2.08941 ms (±0.0980354) | 0.106202 GB/s
+  [Backward] 2.19192 ms (±0.239423) | 0.101235 GB/s
+  [Viterbi] 2.0375 ms (±0.146358) | 0.1093 GB/s
+  [Baum-Welch 10 iter] 100.154 ms (±2.25986) | LL=-811.796
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Profiling: scaling_T_204800 (T=204800, N=3, K=4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [Forward] 0.632121 ms (±0.00576832) | 358.98 GB/s
+  [Backward] 0.632884 ms (±0.00618028) | 358.547 GB/s
+  [Viterbi] 0.630409 ms (±0.0140904) | 361.254 GB/s
+  [Baum-Welch 10 iter] 8.73224 ms (±0.0869828) | LL=1.09861
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Profiling: scaling_T_25600 (T=25600, N=3, K=4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [Forward] 3.92539 ms (±0.422319) | 7.22607 GB/s
+  [Backward] 4.06477 ms (±0.615477) | 6.97828 GB/s
+  [Viterbi] 4.5638 ms (±0.35292) | 6.23767 GB/s
+  [Baum-Welch 10 iter] 375.678 ms (±33.4173) | LL=-131035
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Profiling: scaling_T_3200 (T=3200, N=3, K=4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [Forward] 2.85221 ms (±0.173758) | 1.24321 GB/s
+  [Backward] 2.82981 ms (±0.179875) | 1.25305 GB/s
+  [Viterbi] 2.83873 ms (±0.125184) | 1.25363 GB/s
+  [Baum-Welch 10 iter] 108.307 ms (±4.03515) | LL=-16015.8
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Profiling: scaling_T_400 (T=400, N=3, K=4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [Forward] 2.36334 ms (±0.226002) | 0.187658 GB/s
+  [Backward] 2.37228 ms (±0.151293) | 0.186951 GB/s
+  [Viterbi] 2.23328 ms (±0.197024) | 0.199304 GB/s
+  [Baum-Welch 10 iter] 148.241 ms (±0.73314) | LL=-1663.22
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Profiling: scaling_T_51200 (T=51200, N=3, K=4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [Forward] 6.01524 ms (±0.685213) | 9.43103 GB/s
+  [Backward] 5.98912 ms (±0.655205) | 9.47217 GB/s
+  [Viterbi] 5.64403 ms (±0.540867) | 10.0876 GB/s
+  [Baum-Welch 10 iter] 312.148 ms (±11.1225) | LL=-247857
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Profiling: scaling_T_6400 (T=6400, N=3, K=4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [Forward] 3.20832 ms (±0.318143) | 2.21035 GB/s
+  [Backward] 3.1261 ms (±0.120971) | 2.26848 GB/s
+  [Viterbi] 3.12874 ms (±0.111724) | 2.27475 GB/s
+  [Baum-Welch 10 iter] 113.414 ms (±0.992978) | LL=-1.27988e+09
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Profiling: scaling_T_800 (T=800, N=3, K=4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [Forward] 2.50387 ms (±0.110782) | 0.354132 GB/s
+  [Backward] 2.51431 ms (±0.103254) | 0.352661 GB/s
+  [Viterbi] 2.48159 ms (±0.108672) | 0.358601 GB/s
+  [Baum-Welch 10 iter] 188.039 ms (±4.1508) | LL=-4112.86
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Profiling: validation_convergence (T=2000, N=3, K=4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  [Forward] 2.70899 ms (±0.315239) | 0.818127 GB/s
+  [Backward] 2.6792 ms (±0.304862) | 0.827225 GB/s
+  [Viterbi] 2.62062 ms (±0.106255) | 0.848769 GB/s
+  [Baum-Welch 10 iter] 76.9533 ms (±0.448703) | LL=-3.99961e+08
+
+═══════════════════════════════════════════════════════════════
+                       EXPORT RESULTS                          
+═══════════════════════════════════════════════════════════════
+✓ GPU results saved to results/benchmarks/gpu_nsight_results.csv
+✓ GPU results saved to results/benchmarks/gpu_nsight_results.json
+
+╔══════════════════════════════════════════════════════════════╗
+║                    PROFILING COMPLETE                        ║
+╠══════════════════════════════════════════════════════════════╣
+║  Total tests: 52                                           ║
+║  CSV output:  results/benchmarks/gpu_nsight_results.csv    ║
+║  JSON output: results/benchmarks/gpu_nsight_results.json   ║
+╚══════════════════════════════════════════════════════════════╝
+
+Next steps:
+  Analyze with Python:
+    python analyze_benchmark_results.py --gpu-csv results/benchmarks/gpu_nsight_results.csv
+
+==PROF== Disconnected from process 74939
+
+═══ FULL PROFILING COMPLETE ═══
+Timing results: results/benchmarks/gpu_benchmark_results.csv
+Nsight reports: results/nsight/
+
+═══ JOB FINISHED ═══
+End time: Wed Jan  7 22:55:00 CET 2026
+Duration: 43 seconds

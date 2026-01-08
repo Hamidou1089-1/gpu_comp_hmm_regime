@@ -6,6 +6,9 @@
 namespace hmm {
 namespace gpu {
 namespace kernels {
+
+    
+
     void launch_compute_gamma(
         const float* a, 
         const float* b, 

@@ -1,7 +1,0 @@
-/user/7/dialloh/gpu_comp_hmm_regime/src/cpu/algo_hmm_cpu.cpp: In function ‘void hmm::cpu::algo::initialize_random(HMMModel&, unsigned int)’:
-/user/7/dialloh/gpu_comp_hmm_regime/src/cpu/algo_hmm_cpu.cpp:450:54: warning: unused parameter ‘seed’ [-Wunused-parameter]
-  450 | void initialize_random(HMMModel& model, unsigned int seed) {
-      |                                         ~~~~~~~~~~~~~^~~~
-srun: error: turing-2: task 0: Exited with exit code 1
-Lancez le script Python d'abord !
-srun: error: turing-2: task 0: Exited with exit code 1

@@ -42,12 +42,11 @@ endfunction()
 # CPU Tests
 if(BUILD_TESTS_CPU)
     message(STATUS "CPU tests enabled")
+    add_cpu_test(test_profile_cpu_robust)
     add_cpu_test(test_linear_algebra_cpu)
     add_cpu_test(test_hmm_algorithms_cpu)
-    add_cpu_test(test_real_data_cpu)
     add_cpu_test(test_stats_cpu)
     add_cpu_test(test_stress_cpu)
-    add_cpu_test(test_profile_cpu)
 endif()
 
 if(BUILD_TESTS_CUDA AND BUILD_CUDA)
@@ -94,15 +93,15 @@ if(BUILD_TESTS_CUDA AND BUILD_CUDA)
         ${PROJECT_SOURCE_DIR}/test/common
     )
     add_test(NAME test_baum_welch_gpu COMMAND test_baum_welch_gpu)
-    
-    # Test 1: Forward-Backward GPU
-    add_executable(test_real_data_gpu cuda/test_real_data.cu)
+
+    # test 4
+    add_executable(test_profile_gpu_robust cuda/test_profile_gpu_robust.cu)
     
     # On lui donne accès aux libs CPU et GPU
-    target_link_libraries(test_real_data_gpu PRIVATE hmm_cpu hmm_cuda)
+    target_link_libraries(test_profile_gpu_robust PRIVATE hmm_cpu hmm_cuda)
     
     # On lui donne les chemins des includes
-    target_include_directories(test_real_data_gpu PRIVATE 
+    target_include_directories(test_profile_gpu_robust PRIVATE 
         ${PROJECT_SOURCE_DIR}/include/cuda
         ${PROJECT_SOURCE_DIR}/include/cpu
         ${PROJECT_SOURCE_DIR}/include/cuda/kernels
@@ -110,7 +109,7 @@ if(BUILD_TESTS_CUDA AND BUILD_CUDA)
     )
     
     # On l'enregistre pour CTest
-    add_test(NAME test_real_data_gpu COMMAND test_real_data_gpu)
+    add_test(NAME test_profile_gpu_robust COMMAND test_profile_gpu_robust)
 
     # Benchmark CPU vs GPU
     if(BUILD_BENCHMARKS)

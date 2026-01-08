@@ -2,6 +2,7 @@
 #include <cmath>
 #include <algorithm>
 #include <limits>
+#include <cfloat>
 
 namespace hmm {
 namespace cpu {
@@ -178,13 +179,20 @@ float log_multivariate_normal_pdf(
 // Utility Functions
 // ============================================================================
 
-float log_sum_exp(float log_a, float log_b) {
-    // Compute log(exp(log_a) + exp(log_b)) numerically stable
-    if (std::isinf(log_a) && log_a < 0) return log_b;
-    if (std::isinf(log_b) && log_b < 0) return log_a;
+// float log_sum_exp(float log_a, float log_b) {
+//     // Compute log(exp(log_a) + exp(log_b)) numerically stable
+//     if (std::isinf(log_a) && log_a < 0) return log_b;
+//     if (std::isinf(log_b) && log_b < 0) return log_a;
     
-    float max_val = std::max(log_a, log_b);
-    return max_val + std::log(std::exp(log_a - max_val) + std::exp(log_b - max_val));
+//     float max_val = std::max(log_a, log_b);
+//     return max_val + std::log(std::exp(log_a - max_val) + std::exp(log_b - max_val));
+// }
+
+float log_sum_exp(float a, float b) {
+    if (std::isinf(a) && a < 0.0f) return b;
+    if (std::isinf(b) && b < 0.0f) return a;
+    float m = fmaxf(a, b);
+    return m + logf(expf(a - m) + expf(b - m));
 }
 
 float array_max(const float* arr, int N) {

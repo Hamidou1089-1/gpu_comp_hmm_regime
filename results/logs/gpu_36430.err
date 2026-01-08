@@ -1,9 +1,0 @@
-/user/7/dialloh/gpu_comp_hmm_regime/src/cuda/kernels/matrix_kernels.cu:1:10: fatal error: matrix_kernels.cuh: No such file or directory
-    1 | #include "matrix_kernels.cuh"
-      |          ^~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[2]: *** [src/cuda/kernels/CMakeFiles/hmm_kernels.dir/build.make:77: src/cuda/kernels/CMakeFiles/hmm_kernels.dir/matrix_kernels.cu.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [CMakeFiles/Makefile2:256: src/cuda/kernels/CMakeFiles/hmm_kernels.dir/all] Error 2
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:146: all] Error 2

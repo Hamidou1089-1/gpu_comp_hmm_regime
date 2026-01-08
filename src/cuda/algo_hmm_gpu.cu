@@ -75,7 +75,13 @@ void backward_gpu(const float* d_pi, const float* d_A, const float* d_means, con
 // ----------------------------------------------------------------------------
 // VITERBI SCORE
 // ----------------------------------------------------------------------------
-void viterbi_score_gpu(const float* d_pi, const float* d_A, const float* d_means, const float* d_L, const float* d_log_dets, const float* d_obs, float* d_delta_out, int T, int N, int K) {
+void viterbi_score_gpu(
+    const float* d_pi, const float* d_A, 
+    const float* d_means, const float* d_L, const float* d_log_dets, 
+    const float* d_obs, 
+    float* d_delta_out, 
+    int T, int N, int K
+) {
     float *d_scan, *d_tmp;
     size_t sz = T * N * N * sizeof(float);
     cudaMalloc(&d_scan, sz);
@@ -101,7 +107,7 @@ void smoothing_gpu(const float* d_alpha, const float* d_beta, float* d_gamma_out
 
 
 // ============================================================================
-// VITERBI PATH COMPLET
+// VITERBI PATH COMPLET, here the backtrack is sequencial, so we loss the span complexity
 // ============================================================================
 void viterbi_path_gpu(
     const float* d_pi, const float* d_A, 
@@ -162,18 +168,42 @@ float baum_welch_step_gpu(
     // Emissions pures
     kernels::launch_compute_emissions(d_obs, d_means, d_L, d_log_dets, d_emissions, T, N, K);
 
-    // Calcul LogLikelihood (sur CPU pour l'instant pour la réduction)
-    float* d_log_likelihood_ptr;
-    cudaMalloc(&d_log_likelihood_ptr, sizeof(float));
 
-    // 2. Lancer le kernel de réduction
-    kernels::launch_compute_log_likelihood(d_alpha, d_log_likelihood_ptr, T, N);
 
-    // 3. Récupérer le résultat scalaire sur CPU (pour le retour de fonction et log)
-    float log_likelihood;
-    cudaMemcpy(&log_likelihood, d_log_likelihood_ptr, sizeof(float), cudaMemcpyDeviceToHost);
+    std::vector<float> h_last_alpha(N);
+    // Note: Alpha est stocké row-major [T, N]. La dernière ligne commence à (T-1)*N.
+    cudaMemcpy(h_last_alpha.data(), d_alpha + (T-1)*N, N * sizeof(float), cudaMemcpyDeviceToHost);
+
+    // B. Calculer le LogSumExp sur CPU (Robuste et Précis)
+    float log_likelihood = -std::numeric_limits<float>::infinity();
+    for (int i = 0; i < N; i++) {
+        float val = h_last_alpha[i];
+        if (val == -std::numeric_limits<float>::infinity()) continue;
+        
+        if (log_likelihood == -std::numeric_limits<float>::infinity()) {
+            log_likelihood = val;
+        } else {
+            // Formule stable : max + log(1 + exp(min - max))
+            float _max = std::max(log_likelihood, val);
+            float _min = std::min(log_likelihood, val);
+            log_likelihood = _max + std::log(1.0f + std::exp(_min - _max));
+        }
+    }
+
+
+
+    // // Calcul LogLikelihood (sur CPU pour l'instant pour la réduction)
+    // float* d_log_likelihood_ptr;
+    // cudaMalloc(&d_log_likelihood_ptr, sizeof(float));
+
+    // // 2. Lancer le kernel de réduction
+    // kernels::launch_compute_log_likelihood(d_alpha, d_log_likelihood_ptr, T, N);
+
+    // // 3. Récupérer le résultat scalaire sur CPU (pour le retour de fonction et log)
+    // float log_likelihood;
+    // cudaMemcpy(&log_likelihood, d_log_likelihood_ptr, sizeof(float), cudaMemcpyDeviceToHost);
     
-    cudaFree(d_log_likelihood_ptr);
+    // cudaFree(d_log_likelihood_ptr);
 
     
     // Gamma

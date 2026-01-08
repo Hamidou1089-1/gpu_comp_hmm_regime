@@ -1,0 +1,39 @@
+======================================================================
+                    BENCHMARK SUMMARY REPORT
+======================================================================
+
+CPU PROFILING (Hassan et al. Implementation)
+----------------------------------------------------------------------
+  Total tests: 45
+  Algorithms: forward, backward, viterbi, baum_welch_100, baum_welch_converge
+
+  Best times (smallest T):
+    forward                       :      0.010 ms
+    backward                      :      0.010 ms
+    viterbi                       :      0.001 ms
+    baum_welch_100                :      1.036 ms
+    baum_welch_converge           :      8.105 ms
+
+GPU PROFILING (Hassan et al. Implementation)
+----------------------------------------------------------------------
+  Total tests: 45
+  Device: Quadro RTX 6000
+
+  Best times (smallest T):
+    forward                       :      0.080 ms
+    backward                      :      0.069 ms
+    viterbi                       :      0.066 ms
+    baum_welch_100                :      3.152 ms
+    baum_welch_converge           :      3.876 ms
+
+SPEEDUP SUMMARY (GPU vs CPU)
+----------------------------------------------------------------------
+  forward                  : up to  12.27x speedup
+  viterbi                  : up to   1.39x speedup
+  baum_welch_10            : up to 170.26x speedup
+
+HMMLEARN BASELINE
+----------------------------------------------------------------------
+  Total tests: 34
+
+======================================================================

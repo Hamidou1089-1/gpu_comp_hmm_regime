@@ -1,0 +1,63 @@
+╔══════════════════════════════════════════════════════════════╗
+║    HMM GPU PROFILING                                         ║
+║    Job ID: 36930
+║    Node: turing-2
+║    Mode: full
+║    Tests: all
+╚══════════════════════════════════════════════════════════════╝
+
+Date: Wed Jan  7 16:18:45 CET 2026
+
+═══ GPU Information ═══
+name, memory.total [MiB], driver_version, compute_cap
+Quadro RTX 6000, 23040 MiB, 580.65.06, 7.5
+Quadro RTX 6000, 23040 MiB, 580.65.06, 7.5
+Quadro RTX 6000, 23040 MiB, 580.65.06, 7.5
+
+═══ Building Project ═══
+-- CPU tests enabled
+-- CUDA tests enabled
+--   - test_forward_backward_gpu
+--   - test_viterbi_gpu
+-- Profiling enabled - perf/gprof compatible build
+-- 
+-- ========================================
+-- GPU HMM Regime Detection - Configuration
+-- ========================================
+-- Build type      : Release
+-- C++ compiler    : /usr/bin/c++
+-- CUDA support    : ON
+-- Tests           : ON
+-- Benchmarks      : OFF
+-- Profiling       : ON
+-- ========================================
+-- 
+-- Configuring done (3.5s)
+-- Generating done (0.4s)
+-- Build files have been written to: /user/7/dialloh/gpu_comp_hmm_regime/build
+[ 57%] Linking CUDA device code CMakeFiles/hmm_kernels.dir/cmake_device_link.o
+[ 64%] Linking CUDA static library libhmm_kernels.a
+[ 64%] Built target hmm_kernels
+[ 71%] Building CUDA object src/cuda/CMakeFiles/hmm_cuda.dir/algo_hmm_gpu.cu.o
+[ 78%] Linking CUDA device code CMakeFiles/hmm_cuda.dir/cmake_device_link.o
+[ 85%] Linking CXX static library libhmm_cuda.a
+[ 85%] Built target hmm_cuda
+[ 92%] Building CUDA object test/CMakeFiles/test_profile_gpu_robust.dir/cuda/test_profile_gpu_robust.cu.o
+[100%] Linking CXX executable test_profile_gpu_robust
+[100%] Built target test_profile_gpu_robust
+✓ Build complete
+
+═══ Phase 1: Timing Benchmark ═══
+
+═══ Phase 1 Results ═══
+
+═══ Phase 2: Nsight Compute (quick mode) ═══
+==ERROR== the argument for option '--target-processes' is invalid. Use --help for further details.
+
+═══ FULL PROFILING COMPLETE ═══
+Timing results: results/benchmarks/gpu_benchmark_results.csv
+Nsight reports: results/nsight/
+
+═══ JOB FINISHED ═══
+End time: Wed Jan  7 16:18:58 CET 2026
+Duration: 13 seconds
