@@ -1,339 +1,130 @@
-#!/usr/bin/env python3
-"""
-fetch_sp500_data.py
-Récupère les données S&P500 et calcule les features pour le HMM de détection de régime.
-
-Features:
-1. Log Returns: log(P_t / P_{t-1})
-2. Volatilité réalisée: std des returns sur fenêtre glissante
-3. Volume normalisé: (V_t - mean(V)) / std(V)
-
-Ces 3 features permettent de caractériser les régimes de marché:
-- Bull: returns > 0, faible volatilité, volume modéré
-- Bear: returns < 0, haute volatilité, volume élevé (panique)
-- Sideways: returns ~ 0, faible volatilité, faible volume
-"""
-
-import yfinance as yf
 import numpy as np
 import pandas as pd
-import json
-import struct
-from pathlib import Path
-from datetime import datetime
-import argparse
+import yfinance as yf
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-# ============================================================================
-# CONFIGURATION
-# ============================================================================
+import os
+import time
+from hmmlearn import hmm
 
-# SEED GLOBAL POUR REPRODUCTIBILITÉ
-GLOBAL_SEED = 42
-np.random.seed(GLOBAL_SEED)
+# Configuration
+DATA_DIR = "../../data/finance"
+RESULTS_DIR = "../../results/finance"
+os.makedirs(DATA_DIR, exist_ok=True)
+os.makedirs(RESULTS_DIR, exist_ok=True)
 
-# Chemins
-PROJECT_ROOT = Path(__file__).parent.parent.parent
-DATA_DIR = PROJECT_ROOT / "data"
-PROCESSED_DIR = DATA_DIR / "processed"
-RAW_DIR = DATA_DIR / "raw"
-
-
-def ensure_dirs():
-    """Crée les répertoires nécessaires"""
-    PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
-    RAW_DIR.mkdir(parents=True, exist_ok=True)
-
-
-# ============================================================================
-# ACQUISITION DES DONNÉES
-# ============================================================================
-
-def fetch_sp500_data(
-    ticker: str = "SPY",
-    start_date: str = "2010-01-01",
-    end_date: str = "2026-01-01",
-    save_raw: bool = True
-) -> pd.DataFrame:
-    """
-    Télécharge les données OHLCV du S&P500 (via SPY ETF)
+def fetch_and_prepare_data():
+    print("📥 Downloading S&P 500 Data (2000-2024)...")
+    # Téléchargement
+    df = yf.download("^GSPC", start="2000-01-01", end="2024-12-31")
+    df = pd.DataFrame(df['Close'])
+    df.columns = ['price']
     
-    Args:
-        ticker: Symbole (SPY pour S&P500 ETF)
-        start_date: Date de début
-        end_date: Date de fin (None = aujourd'hui)
-        save_raw: Sauvegarder les données brutes
-        
-    Returns:
-        DataFrame avec OHLCV
-    """
-    print(f"📥 Téléchargement {ticker} depuis {start_date}...")
-    
-    data = yf.download(
-        ticker,
-        start=start_date,
-        end=end_date,
-        progress=True,
-        auto_adjust=True  # Ajuste pour dividendes/splits
-    )
-    
-    if data.empty:
-        raise ValueError(f"Aucune donnée récupérée pour {ticker}")
-    
-    print(f"✓ {len(data)} jours de données ({data.index[0].date()} → {data.index[-1].date()})")
-    
-    if save_raw:
-        raw_path = RAW_DIR / f"{ticker}_raw.csv"
-        data.to_csv(raw_path)
-        print(f"✓ Données brutes sauvegardées: {raw_path}")
-    
-    return data
-
-
-# ============================================================================
-# FEATURE ENGINEERING
-# ============================================================================
-
-def compute_features(
-    data: pd.DataFrame,
-    vol_window: int = 20,
-    vol_annualize: bool = True
-) -> pd.DataFrame:
-    """
-    Calcule les 3 features pour le HMM.
-    
-    Args:
-        data: DataFrame OHLCV
-        vol_window: Fenêtre pour volatilité réalisée (jours)
-        vol_annualize: Annualiser la volatilité (×√252)
-        
-    Returns:
-        DataFrame avec [returns, volatility, volume_norm]
-    """
-    print(f"\n📊 Calcul des features (fenêtre vol={vol_window} jours)...")
-    
+    # Feature Engineering
     # 1. Log Returns
-    close = data['Close']
-    returns = np.log(close / close.shift(1))
+    df['log_ret'] = np.log(df['price'] / df['price'].shift(1))
     
-    # 2. Volatilité réalisée (rolling std des returns)
-    volatility = returns.rolling(window=vol_window).std()
-    if vol_annualize:
-        volatility = volatility * np.sqrt(252)
+    # 2. Volatilité Court Terme (10 jours)
+    df['vol_short'] = df['log_ret'].rolling(window=10).std()
     
-    # 3. Volume normalisé (z-score)
-    volume = data['Volume']
-    volume_mean = volume.rolling(window=vol_window).mean()
-    volume_std = volume.rolling(window=vol_window).std()
-    volume_norm = (volume - volume_mean) / volume_std
+    # 3. Volatilité Long Terme (3 mois = 63 jours de trading)
+    df['vol_long'] = df['log_ret'].rolling(window=63).std()
     
-    # Combine
-    features = pd.DataFrame({
-        'returns': returns.to_numpy().flatten(),
-        'volatility': volatility.to_numpy().flatten(),
-        'volume_norm': volume_norm.to_numpy().flatten()
-    }, index=data.index)
+    # Nettoyage NaN
+    df.dropna(inplace=True)
     
-    # Drop NaN (début de série dû aux fenêtres glissantes)
-    features = features.dropna()
+    # --- NORMALISATION (CRITIQUE pour HMM Gaussien) ---
+    # On stocke moyenne et std pour dé-normaliser si besoin
+    features = ['log_ret', 'vol_short', 'vol_long']
+    X = df[features].values.astype(np.float32)
     
-    print(f"✓ Features calculées: {len(features)} observations × {features.shape[1]} features")
+    means = X.mean(axis=0)
+    stds = X.std(axis=0)
+    X_scaled = (X - means) / stds
     
-    # Statistiques
-    print("\n📈 Statistiques des features:")
-    print(features.describe().round(6))
+    print(f"📊 Dataset ready: T={X.shape[0]}, K={X.shape[1]}")
+    return df, X_scaled
+
+def write_bin(filename, array):
+    with open(filename, 'wb') as f:
+        f.write(array.astype(np.float32).tobytes())
+
+def export_to_bin(X, filename):
+    # Format binaire simple (Row-Major float32)
+    write_bin(filename, X)
     
-    return features
+    # Fichier dims
+    base = os.path.splitext(filename)[0]
+    with open(f"{base}_dims.txt", 'w') as f:
+        f.write(f"{X.shape[0]} {3} {X.shape[1]}") # T N K (N=3 états par défaut)
 
 
-# ============================================================================
-# EXPORT POUR C++
-# ============================================================================
 
-def export_for_cpp(
-    features: pd.DataFrame,
-    output_dir: Path = PROCESSED_DIR,
-    prefix: str = "sp500"
-):
-    """
-    Exporte les données en format binaire pour C++.
+def run_hmmlearn_benchmark(X, n_states=3):
+    print("\n🐍 Running hmmlearn baseline...")
+    start = time.time()
+    model = hmm.GaussianHMM(n_components=n_states, covariance_type="full", n_iter=100, tol=1e-4, random_state=42)
+    model.fit(X)
+    train_time = time.time() - start
     
-    Format:
-    - {prefix}_observations.bin: float32 array [T × K], row-major
-    - {prefix}_info.json: métadonnées (T, K, dates, etc.)
-    """
-    T, K = features.shape
+    start = time.time()
+    states = model.predict(X)
+    inference_time = time.time() - start
     
-    # 1. Export binaire (float32, row-major)
-    data_flat = features.values.astype(np.float32).flatten(order='C')
-    
-    bin_path = output_dir / f"{prefix}_observations.bin"
-    data_flat.tofile(bin_path)
-    
-    print(f"\n💾 Export binaire: {bin_path}")
-    print(f"   Taille: {bin_path.stat().st_size / 1024:.1f} KB")
-    print(f"   Shape: [{T} × {K}] = {T * K} floats")
-    
-    # 2. Export métadonnées JSON
-    info = {
-        'T': int(T),
-        'K': int(K),
-        'dtype': 'float32',
-        'order': 'row-major (C)',
-        'features': list(features.columns),
-        'date_start': str(features.index[0].date()),
-        'date_end': str(features.index[-1].date()),
-        'seed': GLOBAL_SEED,
-        'created_at': datetime.now().isoformat()
-    }
-    
-    json_path = output_dir / f"{prefix}_info.json"
-    with open(json_path, 'w') as f:
-        json.dump(info, f, indent=2)
-    
-    print(f"✓ Métadonnées: {json_path}")
-    
-    # 3. Export CSV (pour inspection/debug)
-    csv_path = output_dir / f"{prefix}_features.csv"
-    features.to_csv(csv_path)
-    print(f"✓ CSV (debug): {csv_path}")
-    
-    # 4. Export des dimensions dans un fichier simple pour C++ facile
-    dims_path = output_dir / f"{prefix}_dims.txt"
-    with open(dims_path, 'w') as f:
-        f.write(f"{T} {K}\n")
-    print(f"✓ Dimensions: {dims_path}")
-    
-    return bin_path, json_path
+    print(f"   Train Time: {train_time*1000:.2f} ms")
+    print(f"   Infer Time: {inference_time*1000:.2f} ms")
+    return states
 
-
-def export_init_params(
-    T: int, K: int, N: int = 3,
-    output_dir: Path = PROCESSED_DIR,
-    prefix: str = "sp500"
-):
-    """
-    Génère et exporte les paramètres initiaux du HMM pour C++.
+def plot_regimes(df, states): # , output_file):
+    # --- RE-ORDER STATES ---
+    # On veut que :
+    # Etat 0 = Faible Volatilité (Bull) -> Vert
+    # Etat 1 = Moyenne Volatilité (Correction) -> Orange/Gris
+    # Etat 2 = Haute Volatilité (Crise) -> Rouge
     
-    Args:
-        T, K: Dimensions des données
-        N: Nombre d'états cachés (3 = Bull/Bear/Sideways)
-    """
-    print(f"\n🔧 Génération des paramètres initiaux (N={N} états)...")
+    # On calcule la volatilité moyenne par état prédit
+    df['state'] = states
+    vol_by_state = df.groupby('state')['vol_short'].mean()
     
-    # SEED pour reproductibilité
-    np.random.seed(GLOBAL_SEED)
+    # Mapping: trier les états par volatilité croissante
+    sorted_states = vol_by_state.sort_values().index
+    state_map = {old: new for new, old in enumerate(sorted_states)}
+    df['mapped_state'] = df['state'].map(state_map)
     
-    # 1. Distribution initiale π (uniforme)
-    pi = np.full(N, 1.0 / N, dtype=np.float32)
+    # Couleurs
+    colors = ['#2ecc71', '#f1c40f', '#e74c3c'] # Vert, Jaune, Rouge
+    labels = ['Bull / Low Vol', 'Correction / Med Vol', 'Crisis / High Vol']
     
-    # 2. Matrice de transition A (persistante)
-    # Les régimes ont tendance à persister
-    persistence = 0.9
-    A = np.full((N, N), (1 - persistence) / (N - 1), dtype=np.float32)
-    np.fill_diagonal(A, persistence)
+    plt.figure(figsize=(15, 8))
     
-    # 3. Moyennes μ (séparées pour les 3 régimes)
-    # Bull: returns positifs, vol basse, volume normal
-    # Bear: returns négatifs, vol haute, volume élevé
-    # Sideways: returns ~0, vol basse, volume bas
-    mu = np.array([
-        [0.001, 0.10, 0.0],    # Bull
-        [-0.002, 0.30, 1.0],   # Bear
-        [0.0, 0.15, -0.5],     # Sideways
-    ], dtype=np.float32)
+    # On trace le prix log pour mieux voir les variations
+    price = np.log(df['price'])
     
-    # 4. Covariances Σ (diagonal avec petite corrélation)
-    base_var = np.array([0.0002, 0.01, 0.5], dtype=np.float32)  # Par feature
-    Sigma = np.zeros((N, K, K), dtype=np.float32)
-    for i in range(N):
-        # Matrice diagonale + régularisation
-        Sigma[i] = np.diag(base_var) * (1.0 + 0.2 * i)  # Plus de variance dans Bear
-        # Régularisation pour garantir positive-définite
-        Sigma[i] += np.eye(K, dtype=np.float32) * 1e-4
     
-    # Export
-    paths = {}
+    for i in range(3):
+        mask = (df['mapped_state'] == i)
+        plt.fill_between(df.index, price.min(), price.max(), where=mask, 
+                         color=colors[i], alpha=0.3, label=labels[i])
     
-    paths['pi'] = output_dir / f"{prefix}_pi_init.bin"
-    pi.tofile(paths['pi'])
+    plt.plot(df.index, price, color='black', linewidth=1)
     
-    paths['A'] = output_dir / f"{prefix}_A_init.bin"
-    A.tofile(paths['A'])
+    plt.title('S&P 500 Market Regimes Detection (GPU Accelerated HMM)', fontsize=16)
+    plt.ylabel('Log Price')
+    plt.legend(loc='upper left')
+    plt.grid(True, alpha=0.3)
     
-    paths['mu'] = output_dir / f"{prefix}_mu_init.bin"
-    mu.tofile(paths['mu'])
-    
-    paths['Sigma'] = output_dir / f"{prefix}_Sigma_init.bin"
-    Sigma.tofile(paths['Sigma'])
-    
-    # JSON avec info
-    params_info = {
-        'N': int(N),
-        'K': int(K),
-        'seed': GLOBAL_SEED,
-        'persistence': float(persistence),
-        'files': {k: str(v) for k, v in paths.items()}
-    }
-    
-    params_json_path = output_dir / f"{prefix}_params_info.json"
-    with open(params_json_path, 'w') as f:
-        json.dump(params_info, f, indent=2)
-    
-    print(f"✓ Paramètres exportés:")
-    for name, path in paths.items():
-        print(f"   {name}: {path}")
-    
-    return paths
-
-
-# ============================================================================
-# MAIN
-# ============================================================================
+    # plt.savefig(output_file, dpi=150)
+    # print(f"🖼️ Graph saved to {output_file}")
 
 def main():
-    parser = argparse.ArgumentParser(description='Prépare les données S&P500 pour HMM')
-    parser.add_argument('--ticker', default='SPY', help='Ticker (default: SPY)')
-    parser.add_argument('--start', default='2005-01-01', help='Date début')
-    parser.add_argument('--end', default=None, help='Date fin (default: now)')
-    parser.add_argument('--vol-window', type=int, default=10, help='Fenêtre volatilité')
-    parser.add_argument('--n-states', type=int, default=3, help='Nombre d\'états HMM')
-    parser.add_argument('--prefix', default='sp500', help='Préfixe fichiers output')
+    # 1. Data
+    df, X = fetch_and_prepare_data()
+    bin_path = f"{DATA_DIR}/sp500_obs.bin"
+    export_to_bin(X, bin_path)
     
-    args = parser.parse_args()
     
-    print("=" * 60)
-    print("  S&P500 DATA PREPARATION FOR HMM")
-    print("=" * 60)
-    print(f"  Seed: {GLOBAL_SEED}")
-    print(f"  Ticker: {args.ticker}")
-    print(f"  Period: {args.start} → {args.end or 'now'}")
-    print("=" * 60)
     
-    ensure_dirs()
-    
-    # 1. Fetch data
-    raw_data = fetch_sp500_data(
-        ticker=args.ticker,
-        start_date=args.start,
-        end_date=args.end
-    )
-    
-    # 2. Compute features
-    features = compute_features(raw_data, vol_window=args.vol_window)
-    
-    # 3. Export for C++
-    export_for_cpp(features, prefix=args.prefix)
-    
-    # 4. Generate initial params
-    T, K = features.shape
-    export_init_params(T, K, N=args.n_states, prefix=args.prefix)
-    
-    print("\n" + "=" * 60)
-    print("  ✅ DATA PREPARATION COMPLETE")
-    print("=" * 60)
-    print(f"\n  Output directory: {PROCESSED_DIR}")
-    print(f"  Ready for C++ profiling!\n")
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

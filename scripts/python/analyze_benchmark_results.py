@@ -137,8 +137,8 @@ def plot_time_vs_T(cpu_df: Optional[pd.DataFrame],
     ax1.set_xlabel('Sequence Length T')
     ax1.set_ylabel('Time (ms)')
     ax1.set_title(f'Execution Time vs T ({algo_filter})')
-    ax1.set_xscale('log')
-    ax1.set_yscale('log')
+    # ax1.set_xscale('log')
+    # ax1.set_yscale('log')
     ax1.legend(loc='upper left')
     ax1.grid(True, alpha=0.3)
     
@@ -162,7 +162,7 @@ def plot_time_vs_T(cpu_df: Optional[pd.DataFrame],
     ax2 = axes[1]
     
     if cpu_df is not None and len(cpu_algo) > 0:
-        time_per_iter = cpu_algo['time_ms'] / 10  # 10 iterations
+        time_per_iter = cpu_algo['time_ms'] / 10  # 100 iterations
         ax2.plot(cpu_algo['T_extracted'], time_per_iter, 
                 'o-', color=COLORS['cpu'], linewidth=2, markersize=8, label='CPU')
     
@@ -210,7 +210,7 @@ def plot_speedup(cpu_df: Optional[pd.DataFrame],
     algos_to_compare = [
         ('forward', 'Forward'),
         ('viterbi', 'Viterbi'),
-        ('baum_welch_10', 'Baum-Welch (10 iter)')
+        ('baum_welch_100', 'Baum-Welch (100 iter)')
     ]
     
     # === Left: GPU Speedup over CPU ===
@@ -764,8 +764,6 @@ Examples:
     plot_gpu_metrics(gpu_df,
                      output_path=str(output_dir / 'gpu_metrics.png'))
     
-    plot_cpu_cache_metrics(cpu_df,
-                           output_path=str(output_dir / 'cpu_cache_metrics.png'))
     
     # Generate summary report
     print("\n📝 Generating summary report...\n")

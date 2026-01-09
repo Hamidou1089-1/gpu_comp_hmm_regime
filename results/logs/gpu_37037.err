@@ -1,0 +1,11 @@
+/user/7/dialloh/gpu_comp_hmm_regime/src/cpu/algo_hmm_cpu.cpp: In function ‘void hmm::cpu::algo::initialize_random(HMMModel&, unsigned int)’:
+/user/7/dialloh/gpu_comp_hmm_regime/src/cpu/algo_hmm_cpu.cpp:472:54: warning: unused parameter ‘seed’ [-Wunused-parameter]
+  472 | void initialize_random(HMMModel& model, unsigned int seed) {
+      |                                         ~~~~~~~~~~~~~^~~~
+/user/7/dialloh/gpu_comp_hmm_regime/test/cuda/test_profile_gpu_robust.cu(504): warning #177-D: variable "bw_runs" was declared but never referenced
+          int bw_runs = 100;
+              ^
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+srun: error: turing-2: task 0: Exited with exit code 1

@@ -132,7 +132,7 @@ void free_model(HMMModel& model) {
 // PROFILING FUNCTIONS
 // =============================================================================
 
-CPUProfileResult profile_forward(const BenchmarkData& data, int num_runs = 100) {
+CPUProfileResult profile_forward(const BenchmarkData& data, int num_runs = 10) {
     CPUProfileResult result;
     result.dataset_name = data.name;
     result.algo_name = "forward";
@@ -185,7 +185,7 @@ CPUProfileResult profile_forward(const BenchmarkData& data, int num_runs = 100) 
     return result;
 }
 
-CPUProfileResult profile_backward(const BenchmarkData& data, int num_runs = 100) {
+CPUProfileResult profile_backward(const BenchmarkData& data, int num_runs = 10) {
     CPUProfileResult result;
     result.dataset_name = data.name;
     result.algo_name = "backward";
@@ -233,7 +233,7 @@ CPUProfileResult profile_backward(const BenchmarkData& data, int num_runs = 100)
     return result;
 }
 
-CPUProfileResult profile_viterbi(const BenchmarkData& data, int num_runs = 100) {
+CPUProfileResult profile_viterbi(const BenchmarkData& data, int num_runs = 10) {
     CPUProfileResult result;
     result.dataset_name = data.name;
     result.algo_name = "viterbi";
@@ -281,7 +281,7 @@ CPUProfileResult profile_viterbi(const BenchmarkData& data, int num_runs = 100) 
     return result;
 }
 
-CPUProfileResult profile_baum_welch(const BenchmarkData& data, int max_iter = 100, int num_runs = 5) {
+CPUProfileResult profile_baum_welch(const BenchmarkData& data, int max_iter = 100, int num_runs = 10) {
     CPUProfileResult result;
     result.dataset_name = data.name;
     result.algo_name = "baum_welch_" + std::to_string(max_iter);
@@ -324,7 +324,7 @@ CPUProfileResult profile_baum_welch(const BenchmarkData& data, int max_iter = 10
 }
 
 CPUProfileResult profile_baum_welch_convergence(const BenchmarkData& data, 
-                                                 float tolerance = 1e-7f, 
+                                                 float tolerance = 1e-2f, 
                                                  int max_iter = 100) {
     CPUProfileResult result;
     result.dataset_name = data.name;
@@ -449,8 +449,8 @@ int main(int argc, char** argv) {
         std::cout << "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
         
         // Adjust iterations based on size
-        int num_runs = (data.T > 50000) ? 100 : 135;
-        int bw_runs = (data.T > 20000) ? 100 : 120;
+        int num_runs = 40;
+        int bw_runs = 40;
         
         if (mode == "all" || mode == "scaling") {
             // Forward
@@ -473,7 +473,7 @@ int main(int argc, char** argv) {
             
             // Baum-Welch 10 iterations
             std::cout << "  [Baum-Welch 10 iter] " << std::flush;
-            CPUProfileResult r_bw10 = profile_baum_welch(data, 100, 5);
+            CPUProfileResult r_bw10 = profile_baum_welch(data, 10, 40);
             std::cout << r_bw10.time_ms << " ms (±" << r_bw10.time_std_ms << ")\n";
             all_results.push_back(r_bw10);
         }

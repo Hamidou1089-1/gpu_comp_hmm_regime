@@ -106,34 +106,74 @@ void smoothing_gpu(const float* d_alpha, const float* d_beta, float* d_gamma_out
 }
 
 
-// ============================================================================
-// VITERBI PATH COMPLET, here the backtrack is sequencial, so we loss the span complexity
-// ============================================================================
+
 void viterbi_path_gpu(
     const float* d_pi, const float* d_A, 
     const float* d_means, const float* d_L, const float* d_log_dets,
     const float* d_obs, 
-    int* d_path_out, 
+    int* d_path_out, // On écrira le résultat ici (sur GPU pour l'uniformité)
     int T, int N, int K
 ) {
+    // 1. Calcul des potentiels et Scan Max-Sum (Sur GPU)
     float *d_scan, *d_tmp, *d_delta;
     cudaMalloc(&d_scan, T * N * N * sizeof(float));
     cudaMalloc(&d_tmp, T * N * N * sizeof(float));
-    cudaMalloc(&d_delta, T * N * sizeof(float));
+    cudaMalloc(&d_delta, T * N * sizeof(float)); // Pour stocker les scores accumulés
 
-    // 1. Scan Max-Sum
+    // A. Prepare Potentials
     kernels::launch_prepare_forward_inputs(d_obs, d_means, d_L, d_log_dets, d_pi, d_A, d_scan, T, N, K);
+    
+    // B. Run Parallel Scan (Algo de Hassan)
     kernels::run_parallel_scan<semiring::MaxSum>(d_scan, d_tmp, T, N);
     
-    dim3 block_extract(256);
-    dim3 grid_extract((N + 255) / 256, T);
-    extract_row0_kernel<<<grid_extract, block_extract>>>(d_scan, d_delta, T, N);
-    
-    // 3. Backtrack
-    kernels::launch_viterbi_backtrack(d_delta, d_A, d_path_out, T, N);
+    // C. Extract Delta (la ligne 0 de chaque bloc matrice scanné)
+    dim3 b(256); 
+    dim3 g((N + 255) / 256, T);
+    extract_row0_kernel<<<g, b>>>(d_scan, d_delta, T, N);
 
+    
+    std::vector<float> h_delta(T * N);
+    std::vector<float> h_A(N * N);
+    cudaMemcpy(h_delta.data(), d_delta, T * N * sizeof(float), cudaMemcpyDeviceToHost);
+    cudaMemcpy(h_A.data(), d_A, N * N * sizeof(float), cudaMemcpyDeviceToHost);
+
+    std::vector<int> h_path(T);
+
+    
+    float best_val = -1e30f; // -infinity
+    int best_state = 0;
+    for(int i=0; i<N; ++i) {
+        if(h_delta[(T-1)*N + i] > best_val) {
+            best_val = h_delta[(T-1)*N + i];
+            best_state = i;
+        }
+    }
+    h_path[T-1] = best_state;
+
+    
+    for(int t = T - 2; t >= 0; --t) {
+        int next_state = h_path[t+1];
+        best_val = -1e30f;
+        best_state = 0;
+
+        for(int i=0; i<N; ++i) {
+            // Score = Delta[t][i] + Transition(i -> next)
+            float score = h_delta[t*N + i] + h_A[i*N + next_state];
+            if(score > best_val) {
+                best_val = score;
+                best_state = i;
+            }
+        }
+        h_path[t] = best_state;
+    }
+
+    
+    cudaMemcpy(d_path_out, h_path.data(), T * sizeof(int), cudaMemcpyHostToDevice);
+
+    // Cleanup
     cudaFree(d_scan); cudaFree(d_tmp); cudaFree(d_delta);
 }
+
 
 // ============================================================================
 // BAUM-WELCH STEP (Avec Cholesky CPU)

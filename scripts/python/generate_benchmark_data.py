@@ -50,13 +50,13 @@ def generate_dataset(T, N, K, label):
         f.write(f"{T} {N} {K}")
 
 # 1. Scaling T (Impact de la taille de séquence -> Hassan vs Standard)
-t = 128
-while t <= 65536: # Décommentez 1M pour stress test
-    generate_dataset(t, 3, 4, f"scaling_T_{t}")
-    t *= 2
+t = 100
+while t <= 100100: # Décommentez 1M pour stress test
+    generate_dataset(t, 2, 2, f"scaling_T_{t}")
+    t += 1000
 
 
 # 3. Validation (Petit dataset pour vérifier la LL)
-generate_dataset(2048, 3, 4, "validation_convergence")
+#generate_dataset(2048, 3, 4, "validation_convergence")
 
 print("✅ Data generation complete.")

@@ -297,7 +297,7 @@ GPUProfileResult profile_viterbi(const BenchmarkData& data, GPUData& gpu, int nu
 }
 
 GPUProfileResult profile_baum_welch(const BenchmarkData& data, GPUData& gpu, 
-                                    int max_iter = 100, int num_runs = 5) {
+                                    int max_iter = 100, int num_runs = 100) {
     GPUProfileResult result;
     result.dataset_name = data.name;
     result.algo_name = "baum_welch_" + std::to_string(max_iter);
@@ -310,7 +310,7 @@ GPUProfileResult profile_baum_welch(const BenchmarkData& data, GPUData& gpu,
     std::vector<float> times;
     float final_ll = 0;
     
-    float tolerance = 1e-5;
+    float tolerance = 1e-2;
 
     for (int run = 0; run < num_runs; run++) {
         // Reset parameters each run
@@ -363,7 +363,7 @@ GPUProfileResult profile_baum_welch(const BenchmarkData& data, GPUData& gpu,
 }
 
 GPUProfileResult profile_baum_welch_convergence(const BenchmarkData& data, GPUData& gpu,
-                                                float tolerance = 1e-7f, int max_iter = 100) {
+                                                float tolerance = 1e-2f, int max_iter = 100) {
     GPUProfileResult result;
     result.dataset_name = data.name;
     result.algo_name = "baum_welch_converge";
@@ -500,8 +500,8 @@ int main(int argc, char** argv) {
         gpu.upload(data, L, log_dets, log_pi, log_A);
         
         // Adjust iterations based on size
-        int num_runs = (data.T > 50000) ? 100 : 135;
-        int bw_runs = (data.T > 20000) ? 100 : 120;
+        int num_runs = 100;
+        int bw_runs = 100;
         
         if (mode == "all" || mode == "scaling" || mode == "quick") {
             // Forward
@@ -527,7 +527,7 @@ int main(int argc, char** argv) {
             
             // Baum-Welch 10 iterations
             std::cout << "  [Baum-Welch 10 iter] " << std::flush;
-            GPUProfileResult r_bw10 = profile_baum_welch(data, gpu, 100, 5);
+            GPUProfileResult r_bw10 = profile_baum_welch(data, gpu, 10, 100);
             std::cout << r_bw10.time_ms << " ms (±" << r_bw10.time_std_ms << ") | LL=" 
                       << r_bw10.log_likelihood << "\n";
             all_results.push_back(r_bw10);

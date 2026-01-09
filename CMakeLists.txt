@@ -11,7 +11,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Options du projet
 option(BUILD_CUDA "Build with CUDA support" OFF)
 option(BUILD_TESTS "Build test suite" ON)
-option(BUILD_BENCHMARKS "Build benchmarks" OFF)
 option(BUILD_PROFILING "Build with profiling support (perf/gprof)" OFF)
 # ==============================================================================
 # Configuration des flags de compilation

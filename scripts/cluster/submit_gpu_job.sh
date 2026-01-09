@@ -12,6 +12,7 @@ PROJECT_NAME="gpu_comp_hmm_regime"
 
 TEST_NAME="${1:-all}"  # Par défaut, run tous les tests
 
+
 echo "=========================================="
 echo "Submitting GPU Job to Ensicompute"
 echo "=========================================="
@@ -22,7 +23,6 @@ echo "📤 Syncing code to cluster..."
 rsync -avz --exclude 'build/' \
            --exclude '.vscode/' \
            --exclude '.venv/' \
-           --exclude 'data/' \
            --exclude '*.o' \
            --exclude '*.a' \
            ./ $REMOTE_USER@$REMOTE_HOST:~/$PROJECT_NAME/
@@ -89,12 +89,12 @@ if [ "TEST_NAME_PLACEHOLDER" == "all" ]; then
             echo "================================"
             echo "Running: $test"
             echo "================================"
-            srun --gres=shard:1 --mem=2GB ./$test
+            srun --gres=shard:1 --mem=16GB ./$test
         fi
     done
 else
     echo "Running specific test: TEST_NAME_PLACEHOLDER"
-    srun --gres=shard:1 --mem=2GB ./TEST_NAME_PLACEHOLDER
+    srun --gres=shard:1 --mem=16GB ./TEST_NAME_PLACEHOLDER
 fi
 
 echo ""

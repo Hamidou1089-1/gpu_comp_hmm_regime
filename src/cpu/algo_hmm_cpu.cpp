@@ -3,6 +3,7 @@
 #include <cmath>
 #include <limits>
 #include <cstring>
+#include <iostream>
 
 namespace hmm {
 namespace cpu {
@@ -23,6 +24,8 @@ void compute_log_gaussian_potentials(
     const int N = model.N;
     const int K = model.K;
     const int T = model.T;
+
+   
     
     // t=1: ψ₁(x₁) = log π(x₁) + log p(y₁|x₁)
     const float* y_1 = observations;
@@ -35,7 +38,10 @@ void compute_log_gaussian_potentials(
         );
         
         log_potentials[i] = std::log(model.pi[i]) + log_pdf;
+        
+
     }
+    
     
     // t=2..T: ψₜ(xₜ₋₁,xₜ) = log A(xₜ₋₁,xₜ) + log p(yₜ|xₜ)
     for (int t = 2; t <= T; t++) {
@@ -71,7 +77,9 @@ float forward_algorithm(
     // t=1: α₁(i) = ψ₁(i)
     for (int i = 0; i < N; i++) {
         alpha[i] = log_potentials[i];
+        
     }
+    
     
     // t=2..T: αₜ(j) = log-sum-exp_i [αₜ₋₁(i) + ψₜ(i,j)]
     for (int t = 2; t <= T; t++) {
@@ -82,6 +90,7 @@ float forward_algorithm(
             
             for (int i = 0; i < N; i++) {
                 float val = alpha[(t - 2) * N + i] + log_potentials[pot_base + i * N + j];
+                
                 log_sum = log_sum_exp(log_sum, val);
             }
             
@@ -92,6 +101,7 @@ float forward_algorithm(
     // Log-likelihood
     float log_likelihood = -std::numeric_limits<float>::infinity();
     for (int i = 0; i < N; i++) {
+        
         log_likelihood = log_sum_exp(log_likelihood, alpha[(T - 1) * N + i]);
     }
     
@@ -148,10 +158,12 @@ void compute_gamma(
         
         for (int i = 0; i < N; i++) {
             log_gamma[i] = alpha[t * N + i] + beta[t * N + i];
+            
         }
         
         normalize_from_log(log_gamma, gamma + t * N, N);
     }
+    
 
     delete[] log_gamma;
 }
@@ -268,7 +280,9 @@ float baum_welch_e_step(
     compute_log_gaussian_potentials(model, observations, log_potentials, workspace);
     
     float log_likelihood = forward_algorithm(log_potentials, alpha, T, N);
+    
     backward_algorithm(log_potentials, beta, T, N);
+    
     
     compute_gamma(alpha, beta, gamma, T, N);
     compute_xi(log_potentials, alpha, beta, xi, T, N);
@@ -295,7 +309,9 @@ void baum_welch_m_step(
     // Update π
     for (int i = 0; i < N; i++) {
         model.pi[i] = gamma[i];
+        
     }
+    
     
     // ========================================================================
     // Update A (Transition Matrix)
@@ -325,6 +341,7 @@ void baum_welch_m_step(
         float denom = 0.0f;
         for (int t = 0; t < T; t++) {
             denom += gamma[t * N + i];
+            
         }
         
         for (int k = 0; k < K; k++) {
@@ -333,13 +350,14 @@ void baum_welch_m_step(
                 numer += gamma[t * N + i] * observations[t * K + k];
             }
             model.mu[i * K + k] = (denom > 1e-10f) ? numer / denom : 0.0f;
+            
         }
     }
     
     // ========================================================================
     // Update Σ (Covariances)
     // ========================================================================
-    const float reg = 1e-4f; // 
+    const float reg = 1e-6f; // 
     
     for (int i = 0; i < N; i++) {
         
@@ -415,6 +433,7 @@ float baum_welch_train(
     float prev_ll = -std::numeric_limits<float>::infinity();
     
     for (int iter = 0; iter < max_iterations; iter++) {
+        
         float ll = baum_welch_e_step(model, observations, gamma, xi, workspace);
         
         if (iter > 0 && ll - prev_ll < tolerance) {
@@ -425,7 +444,10 @@ float baum_welch_train(
         
         baum_welch_m_step(model, observations, gamma, xi);
         prev_ll = ll;
+        
     }
+
+    
     
     delete[] gamma;
     delete[] xi;

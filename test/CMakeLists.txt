@@ -5,7 +5,6 @@
 # Options for fine-grained test control
 option(BUILD_TESTS_CPU "Build CPU tests" ON)
 option(BUILD_TESTS_CUDA "Build CUDA tests" OFF)
-option(BUILD_TESTS_BENCHMARK "Build benchmark tests" OFF)
 
 # Helper function for CPU tests
 function(add_cpu_test test_name)
@@ -43,6 +42,7 @@ endfunction()
 if(BUILD_TESTS_CPU)
     message(STATUS "CPU tests enabled")
     add_cpu_test(test_profile_cpu_robust)
+    add_cpu_test(test_finance_cpu)
     add_cpu_test(test_linear_algebra_cpu)
     add_cpu_test(test_hmm_algorithms_cpu)
     add_cpu_test(test_stats_cpu)
@@ -65,6 +65,20 @@ if(BUILD_TESTS_CUDA AND BUILD_CUDA)
         ${PROJECT_SOURCE_DIR}/test/common
     )
     add_test(NAME test_forward_backward_gpu COMMAND test_forward_backward_gpu)
+
+
+    add_executable(test_finance_gpu cuda/test_finance_gpu.cu)
+    target_link_libraries(test_finance_gpu PRIVATE 
+        hmm_cuda
+        hmm_cpu
+    )
+    target_include_directories(test_finance_gpu PRIVATE
+        ${PROJECT_SOURCE_DIR}/include/cuda
+        ${PROJECT_SOURCE_DIR}/include/cpu
+        ${PROJECT_SOURCE_DIR}/include/cuda/kernels
+        ${PROJECT_SOURCE_DIR}/test/common
+    )
+    add_test(NAME test_finance_gpu COMMAND test_finance_gpu)
     
     # Test 2: Viterbi GPU
     add_executable(test_viterbi_gpu cuda/test_viterbi_gpu.cu)
@@ -111,23 +125,7 @@ if(BUILD_TESTS_CUDA AND BUILD_CUDA)
     # On l'enregistre pour CTest
     add_test(NAME test_profile_gpu_robust COMMAND test_profile_gpu_robust)
 
-    # Benchmark CPU vs GPU
-    if(BUILD_BENCHMARKS)
-        add_executable(benchmark_gpu_vs_cpu cuda/benchmark_gpu_vs_cpu.cu)
-        target_link_libraries(benchmark_gpu_vs_cpu PRIVATE 
-            hmm_cuda
-            hmm_cpu
-        )
-        target_include_directories(benchmark_gpu_vs_cpu PRIVATE
-            ${PROJECT_SOURCE_DIR}/include/cuda
-            ${PROJECT_SOURCE_DIR}/include/cpu
-            ${PROJECT_SOURCE_DIR}/include/cuda/kernels
-            ${PROJECT_SOURCE_DIR}/test/common
-        )
-        add_test(NAME benchmark_gpu_vs_cpu COMMAND benchmark_gpu_vs_cpu)
-
-        message(STATUS "  - benchmark_gpu_vs_cpu")
-    endif()
+    
     
     
     message(STATUS "  - test_forward_backward_gpu")

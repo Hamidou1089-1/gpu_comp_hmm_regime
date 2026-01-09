@@ -172,7 +172,7 @@ cluster-build:
 	cmake -DCMAKE_BUILD_TYPE=Release \
 	      -DBUILD_CUDA=OFF \
 	      -DBUILD_TESTS_CPU=ON \
-	      -DBUILD_TESTS_CUDA=OFF \
+	      -DBUILD_TESTS_CUDA=ON \
 	      .. && \
 	make -j4
 	@echo "✅ Local build successful"
@@ -182,10 +182,12 @@ cluster-submit: cluster-build
 	@echo "🚀 Submitting job to cluster..."
 	./scripts/cluster/submit_gpu_job.sh $(TEST)
 
+cluster-submit-finance: 
+	$(MAKE) cluster-submit TEST=test_finance_gpu
 
 # Clean remote build
 cluster-clean:
-	@ssh dialloh@nash.ensimag.fr 'cd gpu_comp_hmm_regime && rm -rf build/ && rm -rf data/ && rm -rf results/'
+	@ssh dialloh@nash.ensimag.fr 'cd gpu_comp_hmm_regime && rm -rf build/'
 	@echo "🧹 Remote build directory cleaned"
 
 
@@ -260,6 +262,13 @@ profile-cpu-robust: build ## Run robust CPU profiling on benchmark data
 	@mkdir -p results/benchmarks
 	@./build/test/test_profile_cpu_robust data/bench results/benchmarks/cpu_benchmark all
 	@echo "$(GREEN)✓ CPU profiling complete$(NC)"
+	@echo "Results: results/benchmarks/cpu_benchmark_results.csv"
+
+profile-cpu-finance: build ## Run robust CPU profiling on benchmark data
+	@echo "$(BLUE)Running CPU finance (SP&500)...$(NC)"
+	@mkdir -p results/finance
+	@./build/test/test_finance_cpu 
+	@echo "$(GREEN)✓ CPU finance complete$(NC)"
 	@echo "Results: results/benchmarks/cpu_benchmark_results.csv"
 
 profile-cpu-perf:  ## Run CPU profiling with perf metrics
@@ -360,4 +369,4 @@ clean-build: ## Clean build directory
 	@rm -rf $(BUILD_DIR)
 	@echo "$(YELLOW)Cleaned build directory$(NC)"
 
-clean: clean-build clean-results ## Clean everything
+clean: clean-build ## Clean everything

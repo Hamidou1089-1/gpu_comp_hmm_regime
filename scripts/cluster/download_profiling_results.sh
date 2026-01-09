@@ -35,8 +35,10 @@ print_usage() {
 # Parse arguments
 DOWNLOAD_LOGS=true
 DOWNLOAD_RESULTS=true
+DOWNLOAD_RESULTS_FINANCE=true
 DOWNLOAD_NSIGHT=true
 CLEAN_REMOTE=false
+
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -99,6 +101,7 @@ mkdir -p ${LOCAL_RESULTS_DIR}/logs
 mkdir -p ${LOCAL_RESULTS_DIR}/benchmarks
 mkdir -p ${LOCAL_RESULTS_DIR}/nsight
 mkdir -p ${LOCAL_RESULTS_DIR}/figures
+mkdir -p ${LOCAL_RESULTS_DIR}/finance
 
 # ==============================================================================
 # 1. Download logs
@@ -135,6 +138,26 @@ if [ "$DOWNLOAD_RESULTS" = true ]; then
     if ls ${LOCAL_RESULTS_DIR}/benchmarks/*.csv 1>/dev/null 2>&1; then
         echo -e "${GREEN}✓ Downloaded benchmark files:${NC}"
         ls -la ${LOCAL_RESULTS_DIR}/benchmarks/*.csv 2>/dev/null
+    else
+        echo -e "${YELLOW}⚠ No benchmark CSV files found${NC}"
+    fi
+fi
+
+if [ "$DOWNLOAD_RESULTS_FINANCE" = true ]; then
+    echo ""
+    echo -e "${BLUE}📥 Downloading benchmark results...${NC}"
+    rsync -avz --progress \
+        --include='*.csv' \
+        --include='*.bin' \
+        --include='*.json' \
+        --exclude='*' \
+        ${REMOTE_USER}@${REMOTE_HOST}:~/${PROJECT_NAME}/results/finance/ \
+        ${LOCAL_RESULTS_DIR}/finance/ 2>/dev/null || echo "  (no benchmark files yet)"
+    
+    # Show what we got
+    if ls ${LOCAL_RESULTS_DIR}/finance/*.bin 1>/dev/null 2>&1; then
+        echo -e "${GREEN}✓ Downloaded benchmark files:${NC}"
+        ls -la ${LOCAL_RESULTS_DIR}/finance/*.bin 2>/dev/null
     else
         echo -e "${YELLOW}⚠ No benchmark CSV files found${NC}"
     fi
